@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/student_manage_system/student_manage_system.iml" filepath="$PROJECT_DIR$/student_manage_system/student_manage_system.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/基于SpringBoot的学生考勤管理系统.iml" filepath="$PROJECT_DIR$/.idea/基于SpringBoot的学生考勤管理系统.iml" />
+    </modules>
+  </component>
+</project>

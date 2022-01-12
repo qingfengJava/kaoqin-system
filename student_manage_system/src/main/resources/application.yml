@@ -1,0 +1,14 @@
+server:
+  port: 9999
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/student_manage_system?setUnicode=true&characterEncoding=utf8&useAffectedRows=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

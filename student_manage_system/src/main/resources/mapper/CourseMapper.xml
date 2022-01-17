@@ -49,12 +49,10 @@
     <select id="getCourseById" parameterType="java.util.List" resultType="com.qingfeng.entity.Course">
         select *
         from s_course
-        <where>
-            id in
-            <foreach collection="list" open="(" close=")" separator="," item="id">
-                #{id}
-            </foreach>
-        </where>
+        where id in
+        <foreach collection="list" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
     </select>
 
 </mapper>

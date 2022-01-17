@@ -10,7 +10,6 @@
     <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
     <script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
     <script type="text/javascript" th:inline="javascript">
-        /*<![CDATA[*/
         $(function() {
             //datagrid初始化
             $('#dataList').datagrid({
@@ -34,11 +33,14 @@
                     {field:'id',title:'ID',width:50, sortable: true},
                     {field:'studentId',title:'学生',width:200,
                         formatter: function(value,row,index){
+                        console.log(row.studentId);
                             if (row.studentId){
-                                var studentList = $("#studentList").combobox("getData");
-                                for(var i=0;i<studentList.length;i++ ){
-                                    //console.log(clazzList[i]);
-                                    if(row.studentId == studentList[i].id)return studentList[i].username;
+                                let studentList = $("#studentList").combobox("getData");
+                                for(let i=0;i<studentList.length;i++ ){
+                                    console.log("heh2"+studentList[i]);
+                                    if(row.studentId == studentList[i].id){
+                                        return studentList[i].username;
+                                    }
                                 }
                                 return row.studentId;
                             } else {
@@ -49,8 +51,8 @@
                     {field:'courseId',title:'课程',width:200,
                         formatter: function(value,row,index){
                             if (row.courseId){
-                                var courseList = $("#courseList").combobox("getData");
-                                for(var i=0;i<courseList.length;i++ ){
+                                let courseList = $("#courseList").combobox("getData");
+                                for(let i=0;i<courseList.length;i++ ){
                                     if(row.courseId === courseList[i].id)return courseList[i].name;
                                 }
                                 return row.courseId;
@@ -77,7 +79,7 @@
                     multiple: false,
                     editable: false,
                     method: "post",
-                    url: "/student/list?from=combox",
+                    url: "/student/list?form=combox",
 
                 });
 
@@ -89,7 +91,7 @@
                     multiple: false, //可多选
                     editable: false, //不可编辑
                     method: "post",
-                    url: [[@{/course/getCourseList(from=combox)}]],
+                    url: "/course/getCourseList?from=combox",
 
                 });
             }
@@ -175,7 +177,7 @@
                             } else{
                                 $.ajax({
                                     type: "post",
-                                    url: [[@{/selectedCourse/addSelectedCourse}]],
+                                    url: "/selectedCourse/addSelectedCourse",
                                     data: $("#addForm").serialize(),
                                     success: function(data){
                                         if(data.success){
@@ -230,7 +232,7 @@
 
             // 添加信息学生选择框
             $("#add_studentList").combobox({
-                url: "/student/list?from=combox",
+                url: "/student/list?form=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
                     var data = $(this).combobox("getData");
@@ -240,7 +242,7 @@
 
             // 添加信息课程选择框
             $("#add_courseList").combobox({
-                url: [[@{/course/getCourseList(from=combox)}]],
+                url: "/course/getCourseList?from=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
                     var data = $(this).combobox("getData");

@@ -35,7 +35,6 @@ public class ShiroConfig {
         map.put("/easyui/**", "anon");
         map.put("/h-ui/**", "anon");
         map.put("/bootstrap/**", "anon");
-        map.put("/h-ui/images/武生院1.jpg", "anon");
 
 
         // 配置系统受限资源(需要认证才能访问的资源)

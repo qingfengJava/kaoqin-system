@@ -77,11 +77,13 @@ public class AttendanceController {
 
         PageBean<Attendance> pageBean = attendanceService.queryPage(paramMap);
         if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
+            System.out.println(pageBean.getDatas());
             return pageBean.getDatas();
         } else {
             Map<String, Object> result = new HashMap<>();
             result.put("total", pageBean.getTotalsize());
             result.put("rows", pageBean.getDatas());
+            System.out.println(result);
             return result;
         }
     }
@@ -91,9 +93,9 @@ public class AttendanceController {
      */
     @RequestMapping("/getStudentSelectedCourseList")
     @ResponseBody
-    public Object getStudentSelectedCourseList(@RequestParam(value = "studentid", defaultValue = "0") String studentid) {
+    public Object getStudentSelectedCourseList(@RequestParam(value = "studentId", defaultValue = "0") String studentId) {
         // 通过学生id查询选课信息
-        List<SelectedCourse> selectedCourseList = selectedCourseService.getAllBySid(Integer.valueOf(studentid));
+        List<SelectedCourse> selectedCourseList = selectedCourseService.getAllBySid(Integer.valueOf(studentId));
         // 通过选课中的课程id查询学生所选择的课程
         List<Integer> ids = new ArrayList<>();
         for (SelectedCourse selectedCourse : selectedCourseList) {
@@ -131,6 +133,7 @@ public class AttendanceController {
                     attendance.setType("迟到");
                 }
                 // 保存签到信息
+                attendance.setDate(new Date());
                 int count = attendanceService.addAttendance(attendance);
                 if (count > 0) {
                     return ResultVO.success();

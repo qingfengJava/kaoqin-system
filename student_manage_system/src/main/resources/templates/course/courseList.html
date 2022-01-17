@@ -18,7 +18,7 @@
                 collapsible: false,
                 fit: true,
                 method: "post",
-                url: "getCourseList",
+                url: "/course/getCourseList",
                 idField:'id',
                 singleSelect: false,
                 pagination: true,
@@ -33,6 +33,7 @@
                     {field:'name',title:'课程名称',width:200},
                     {field:'teacherId',title:'授课老师',width:200,
                         formatter: function(value,row,index){
+                        console.log(row);
                             if (row.teacherId){
                                 var teacherList = $("#teacherList").combobox("getData");
                                 for(var i=0;i<teacherList.length;i++ ){
@@ -247,7 +248,7 @@
                         plain: true,
                         iconCls:'icon-book-add',
                         handler:function(){
-                            var validate = $("#addForm").form("validate");
+                            let validate = $("#addForm").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
                             } else{

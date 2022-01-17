@@ -1,0 +1,19 @@
+
+r
+java:S3008"\Rename this field "LEAVE_STATUS_WAIT" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(­±¹’
+x
+java:S3008#"]Rename this field "LEAVE_STATUS_AGREE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‚è§Äûÿÿÿÿ
+{
+java:S3008("`Rename this field "LEAVE_STATUS_DISAGREE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ö½´òüÿÿÿÿ
+s
+java:S1104"]Make LEAVE_STATUS_WAIT a static final constant or non-public and provide accessors if needed.(­±¹’
+y
+java:S1104#"^Make LEAVE_STATUS_AGREE a static final constant or non-public and provide accessors if needed.(‚è§Äûÿÿÿÿ
+|
+java:S1104("aMake LEAVE_STATUS_DISAGREE a static final constant or non-public and provide accessors if needed.(ö½´òüÿÿÿÿ
+M
+java:S1444"7Make this "public static LEAVE_STATUS_WAIT" field final(­±¹’
+S
+java:S1444#"8Make this "public static LEAVE_STATUS_AGREE" field final(‚è§Äûÿÿÿÿ
+V
+java:S1444(";Make this "public static LEAVE_STATUS_DISAGREE" field final(ö½´òüÿÿÿÿ

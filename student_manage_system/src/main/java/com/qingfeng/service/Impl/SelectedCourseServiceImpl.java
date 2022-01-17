@@ -83,6 +83,7 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
         LambdaQueryWrapper<SelectedCourse> wrapper = new LambdaQueryWrapper<SelectedCourse>()
                 .eq(SelectedCourse::getStudentId, studentId);
         List<SelectedCourse> selectedCourseList = selectedCourseMapper.selectList(wrapper);
+        //根据通过学生Id查询信息来判断是否是学生
         return selectedCourseList.isEmpty();
     }
 

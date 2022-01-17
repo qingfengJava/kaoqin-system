@@ -10,9 +10,8 @@
     <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
     <script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
     <script type="text/javascript" th:inline="javascript">
-        /*<![CDATA[*/
         $(function() {
-            //datagrid初始化
+            //界面初始化
             $('#dataList').datagrid({
                 title:'专业列表',
                 iconCls:'icon-more',
@@ -20,7 +19,7 @@
                 collapsible: false,
                 fit: true,
                 method: "post",
-                url: "getClazzList",
+                url: "/clazz/getClazzList",
                 idField:'id',
                 singleSelect: false,
                 pagination: true,
@@ -29,9 +28,10 @@
                 sortOrder: 'DESC',
                 remoteSort: false,
                 columns: [
+                    //数据渲染
                     [
-                    {field:'chk',checkbox: true,width:50},
-                    {field:'id',title:'ID',width:250, sortable: true},
+                    {field:'chk',checkbox: true,width:50}, //复选框
+                    {field:'id',title:'ID',width:250, sortable: true}, /* id号 */
                     {field:'name',title:'专业名称',width:200},
                     {field:'info',title:'专业介绍',width:100,
                     },
@@ -39,8 +39,9 @@
                 ],
                 toolbar: "#toolbar"
             });
-            //设置分页控件
-            var p = $('#dataList').datagrid('getPager');
+
+            //给数据列表设置分页控件
+            let p = $('#dataList').datagrid('getPager');
             $(p).pagination({
                 pageSize: 10,
                 pageList: [10,20,30,50,100],
@@ -56,11 +57,13 @@
 
             // 删除
             $("#delete").click(function(){
-                var selectAll = $("#dataList").datagrid("getSelections");
+                //获取复选框对象
+                let selectAll = $("#dataList").datagrid("getSelections");
                 if(selectAll == null){
                     $.messager.alert("消息提醒", "请选择数据进行删除!", "warning");
                 } else{
-                    var jsonObj = {};
+                    //封装json格式的数据
+                    let jsonObj = {};
                     $.each(selectAll,function(i,n){
                         jsonObj["ids["+i+"]"] = n.id;
                     });
@@ -68,7 +71,7 @@
                         if(r){
                             $.ajax({
                                 type: "post",
-                                url: "deleteClazz",
+                                url: "/clazz/deleteClazz",
                                 data: jsonObj,
                                 success: function(data){
                                     if(data.success){
@@ -110,7 +113,7 @@
                             } else{
                                 $.ajax({
                                     type: "post",
-                                    url: "addClazz",
+                                    url: "/clazz/addClazz",
                                     data: $("#addForm").serialize(),
                                     success: function(data){
                                         if(data.success){
@@ -155,7 +158,7 @@
 
             //修改按钮监听事件
             $("#edit-btn").click(function(){
-                var selectRow = $("#dataList").datagrid("getSelected");
+                let selectRow = $("#dataList").datagrid("getSelected");
                 if(selectRow == null){
                     $.messager.alert("消息提醒", "请选择数据进行修改!", "warning");
                     return;
@@ -181,13 +184,13 @@
                         plain: true,
                         iconCls:'icon-add',
                         handler:function(){
-                            var validate = $("#editForm").form("validate");
+                            let validate = $("#editForm").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
                             } else{
                                 $.ajax({
                                     type: "post",
-                                    url:"editClazz",
+                                    url:"/clazz/editClazz",
                                     data: $("#editForm").serialize(),
                                     success: function(data){
                                         if(data.success){
@@ -230,7 +233,6 @@
             });
 
         });
-        /*]]>*/
     </script>
 </head>
 

@@ -246,6 +246,7 @@
 			method: "post",
 		});
 
+		/* 添加专业下拉列表框 */
 		$("#add_clazzList").combobox({
 			url: "/clazz/getClazzList?from=combox",
 			onLoadSuccess: function(){
@@ -307,17 +308,14 @@
 										// 清空原表格数据
 										$("#add_number").textbox('setValue', "");
 										$("#add_name").textbox('setValue', "");
+										//为添加方便，默认设置为1
+										$("#add_password").textbox('setValue', "1");
+										$("#add_nick_name").textbox('setValue', "");
 										$("#add_sex").textbox('setValue', "男");
-										$("#add_phone").textbox('setValue', "");
-
+										$("#add_phone").textbox('setValue', "13131313311");
 
 										//重新刷新页面数据
-										$('#dataList').datagrid("options").queryParams = {classId: classId};
 										$('#dataList').datagrid("reload");
-										setTimeout(function(){
-											$("#clazzList").combobox('setValue', classId);
-										}, 100);
-
 									} else{
 										$.messager.alert("消息提醒",data.message,"warning");
 									}

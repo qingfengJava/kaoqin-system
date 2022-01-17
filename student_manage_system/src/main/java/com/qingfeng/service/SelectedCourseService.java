@@ -1,6 +1,5 @@
 package com.qingfeng.service;
 
-
 import com.qingfeng.entity.Course;
 import com.qingfeng.entity.SelectedCourse;
 import com.qingfeng.utils.PageBean;
@@ -18,6 +17,11 @@ public interface SelectedCourseService {
 
     int deleteSelectedCourse(Integer id);
 
+    /**
+     * 检查学生信息
+     * @param studentId
+     * @return
+     */
     boolean checkSelectedCourse(Integer studentId);
 
     List<SelectedCourse> getAllBySid(Integer studentId);

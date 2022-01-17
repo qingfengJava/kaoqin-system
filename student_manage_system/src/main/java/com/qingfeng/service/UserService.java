@@ -58,6 +58,10 @@ public interface UserService {
      */
     int updateUser(User user);
 
-
+    /**
+     * 根据Id查询这个专业下是否有学生
+     * @param id
+     * @return
+     */
     boolean checkStudentInCourse(Integer id);
 }

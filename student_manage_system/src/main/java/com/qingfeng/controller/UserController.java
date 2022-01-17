@@ -82,14 +82,21 @@ public class UserController {
      */
     @PostMapping("/add")
     public ResultVO<Boolean> addUser(User user) {
-        //调用service层添加用户的方法    i 表示影响的行数
-        int i = userService.addUser(user);
-        if (i > 0) {
-            //返回封装的resultVo信息
-            return ResultVO.success();
-        } else {
-            return ResultVO.fail();
+        //注意：添加用户要保证用户名不能重复，所以要先查询用户是否存在
+        User select_user = userService.getByUsername(user.getUsername());
+        //为null说明改用户不存在，允许添加
+        if (select_user == null){
+            //调用service层添加用户的方法    i 表示影响的行数
+            int i = userService.addUser(user);
+            if (i > 0) {
+                //返回封装的resultVo信息
+                return ResultVO.success();
+            }else {
+                return ResultVO.fail("添加用户出现未知的异常！");
+            }
         }
+        return ResultVO.fail("添加失败，用户已存在");
+
     }
 
     /**
@@ -155,6 +162,7 @@ public class UserController {
                 return ResultVO.fail("无法删除，存在课程关联学生");
             }
         }
+        //根据id集合删除相关信息，返回的是影响的行数
         int count = userService.deleteUser(ids);
         if (count > 0) {
             return ResultVO.success();

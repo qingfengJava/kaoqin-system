@@ -10,7 +10,6 @@
     <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
     <script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
     <script type="text/javascript" th:inline="javascript">
-        /*<![CDATA[*/
         $(function() {
             //datagrid初始化
             $('#dataList').datagrid({
@@ -37,7 +36,9 @@
                                 var studentList = $("#studentList").combobox("getData");
                                 for(var i=0;i<studentList.length;i++ ){
                                     //console.log(clazzList[i]);
-                                    if(row.studentId == studentList[i].id)return studentList[i].username;
+                                    if(row.studentId == studentList[i].id){
+                                        return studentList[i].username;
+                                    }
                                 }
                                 return row.studentId;
                             } else {
@@ -88,6 +89,16 @@
                         //$('#dataList').datagrid("options").queryParams = {clazzid: newValue};
                         //$('#dataList').datagrid("reload");
                     }
+                });
+                $("#courseList").combobox({
+                    width: "80",
+                    height: "25",
+                    valueField: "id",
+                    textField: "name",
+                    multiple: false,
+                    editable: false,
+                    method: "post",
+                    url: "/course/getCourseList?from=combox",
                 });
             }
 
@@ -327,8 +338,8 @@
             //设置添加窗口
             $("#addDialog").dialog({
                 title: "添加请假单",
-                width: 450,
-                height: 350,
+                width: 600,
+                height: 400,
                 iconCls: "icon-add",
                 modal: true,
                 collapsible: false,
@@ -391,15 +402,57 @@
                 method: "post",
             });
 
+            $("#add_courseList,#courseList").combobox({
+                width: "200",
+                height: "30",
+                valueField: "id",
+                textField: "username",
+                multiple: false, //不可多选
+                editable: false, //不可编辑
+                method: "post",
+            });
+
             // 添加信息学生选择框
             $("#add_studentList").combobox({
-                url: "/student/list?from=combox",
+                url: "/student/list?form=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
                     var data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
+                    getStudentSelectedCourseList(data[0].id);
+                },
+                onChange:function(id,o){
+                    getStudentSelectedCourseList(id);
                 }
             });
+
+            // 添加课程选择框
+            $("#add_courseList").combobox({
+                url: "/course/getCourseList?from=combox",
+                onLoadSuccess: function(){
+                    // 默认选择第一条数据
+                    var data = $(this).combobox("getData");
+                    $(this).combobox("setValue", data[0].id);
+                }
+
+            });
+
+            // 学生选课列表
+            function getStudentSelectedCourseList(sid){
+                // 添加课程选择框
+                console.log("sid:", sid);
+                var u = "/attendance/getStudentSelectedCourseList";
+                $("#add_courseList").combobox({
+                    url:u+"?studentId="+sid,
+                    onLoadSuccess: function(){
+                        // 默认选择第一条数据
+                        var data = $(this).combobox("getData");
+                        console.log("getData:", data);
+                        console.log(data[0].id);
+                        $(this).combobox("setValue", data[0].id);
+                    }
+                });
+            }
 
             // 编辑信息学生选择框
             $("#edit_studentList").combobox({
@@ -414,7 +467,9 @@
             //搜索按钮监听事件
             $("#search-btn").click(function(){
                 $('#dataList').datagrid('load',{
-                    studentid: $("#studentList").combobox('getValue') == '' ? 0 : $("#studentList").combobox('getValue')
+                    studentid: $("#studentList").combobox('getValue') == '' ? 0 : $("#studentList").combobox('getValue'),
+                    courseid: $("#courseList").combobox('getValue') === '' ? 0 : $("#courseList").combobox('getValue')
+
                 });
             });
 
@@ -422,9 +477,9 @@
             $("#clear-btn").click(function(){
                 $('#dataList').datagrid("reload",{});
                 $("#studentList").combobox('clear');
+                $("#courseList").combobox('clear');
             });
         });
-        /*]]>*/
     </script>
 </head>
 <body>
@@ -442,6 +497,7 @@
     <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="margin-top: 3px;">
         学生：<input id="studentList" class="easyui-textbox" name="studentid" />
+        课程：<input id="courseList" class="easyui-textbox" name="courseList" />
         <a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
         <a id="clear-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">清空搜索</a>
     </div>
@@ -455,6 +511,19 @@
                 <td style="width:60px">学生:</td>
                 <td colspan="3">
                     <input id="add_studentList" style="width: 300px; height: 30px;" class="easyui-textbox" name="studentId" data-options="required:true, missingMessage:'请选择学生信息'" />
+                </td>
+            </tr>
+            <tr>
+                <td style="width:60px">请假课程:</td>
+                <td colspan="3">
+                    <input id="add_courseList" style="width: 300px; height: 30px;" class="easyui-textbox" name="courseId" data-options="required:true, missingMessage:'请选择课程'" />
+                </td>
+                <td style="width:80px"></td>
+            </tr>
+            <tr>
+                <td style="width:60px">请假时长:</td>
+                <td colspan="3">
+                    <input id="add_time" style="width: 300px; height: 30px;" class="easyui-textbox" name="courseId" data-options="required:true, missingMessage:'请输入请假时长'" />
                 </td>
             </tr>
             <tr>

@@ -40,24 +40,26 @@ public class SelectedCourseController {
     @ResponseBody
     public Object getClazzList(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                @RequestParam(value = "rows", defaultValue = "100") Integer rows,
-                               @RequestParam(value = "teacherid", defaultValue = "0") String studentid,
-                               @RequestParam(value = "teacherid", defaultValue = "0") String courseid, String from, HttpSession session) {
+                               @RequestParam(value = "studentId", defaultValue = "0") String studentId,
+                               @RequestParam(value = "courseId", defaultValue = "0") String courseId, String from, HttpSession session) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
-        if (!"0".equals(studentid)) {
-            paramMap.put("studentId", studentid);
+        if (!"0".equals(studentId)) {
+            paramMap.put("studentId", studentId);
         }
-        if (!"0".equals(courseid)) {
-            paramMap.put("courseId", courseid);
+        if (!"0".equals(courseId)) {
+            paramMap.put("courseId", courseId);
         }
         //判断是老师还是学生权限
         User user = (User) session.getAttribute(UserConstant.LOGIN_USER);
-        if (!UserConstant.STUDENT_CODE.equals(user.getUserType())) {
+        if (UserConstant.STUDENT_CODE.equals(user.getUserType())) {
             //是学生权限，只能查询自己的信息
             paramMap.put("studentId", user.getId());
         }
         PageBean<SelectedCourse> pageBean = selectedCourseService.queryPage(paramMap);
+        System.out.println(paramMap);
+        System.out.println("结果："+pageBean.getDatas());
         if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
         } else {
@@ -66,6 +68,8 @@ public class SelectedCourseController {
             result.put("rows", pageBean.getDatas());
             return result;
         }
+
+
     }
 
     /**

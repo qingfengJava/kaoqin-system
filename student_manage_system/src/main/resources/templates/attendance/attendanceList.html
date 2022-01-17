@@ -33,8 +33,8 @@
                     {field:'studentId',title:'学生',width:200,
                         formatter: function(value,row,index){
                             if (row.studentId){
-                                var studentList = $("#studentList").combobox("getData");
-                                for(var i=0;i<studentList.length;i++ ){
+                                let studentList = $("#studentList").combobox("getData");
+                                for(let i=0;i<studentList.length;i++ ){
                                     if(row.studentId === studentList[i].id) {
                                         return studentList[i].username;
                                     }
@@ -48,8 +48,8 @@
                     {field:'courseId',title:'课程',width:200,
                         formatter: function(value,row,index){
                             if (row.courseId){
-                                var courseList = $("#courseList").combobox("getData");
-                                for(var i=0;i<courseList.length;i++ ){
+                                let courseList = $("#courseList").combobox("getData");
+                                for(let i=0;i<courseList.length;i++ ){
                                     if(row.courseId === courseList[i].id) {
                                         return courseList[i].name;
                                     }
@@ -71,6 +71,7 @@
                     $("#courseList").combobox("getData");
                 }
             });
+
             // 提前加载学生和课程信息
             function preLoadClazz(){
                 $("#studentList").combobox({
@@ -219,7 +220,7 @@
 
             // 添加学生选择框
             $("#add_studentList").combobox({
-                url: "/student/list?from=combox",
+                url: "/student/list?form=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
                     var data = $(this).combobox("getData");
@@ -261,8 +262,8 @@
             //搜索按钮监听事件
             $("#search-btn").click(function(){
                 $('#dataList').datagrid('load',{
-                    studentid: $("#studentList").combobox('getValue') === '' ? 0 : $("#studentList").combobox('getValue'),
-                    courseid: $("#courseList").combobox('getValue') === '' ? 0 : $("#courseList").combobox('getValue'),
+                    studentId: $("#studentList").combobox('getValue') === '' ? 0 : $("#studentList").combobox('getValue'),
+                    courseId: $("#courseList").combobox('getValue') === '' ? 0 : $("#courseList").combobox('getValue'),
                     type: $("#typeList").combobox('getValue') === '' ? '' : $("#typeList").combobox('getValue'),
                     date:$("#date").datebox('getValue')
                 });

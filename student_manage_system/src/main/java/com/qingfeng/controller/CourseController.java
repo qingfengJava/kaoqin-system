@@ -1,6 +1,8 @@
 package com.qingfeng.controller;
 
+import com.qingfeng.constants.UserConstant;
 import com.qingfeng.entity.Course;
+import com.qingfeng.entity.User;
 import com.qingfeng.service.CourseService;
 import com.qingfeng.utils.IdsData;
 import com.qingfeng.utils.PageBean;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,17 +40,35 @@ public class CourseController {
     @ResponseBody
     public Object getClazzList(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                @RequestParam(value = "rows", defaultValue = "100") Integer rows,
+                               @RequestParam(value = "weakday", defaultValue = "") String weakday,
                                String name,
-                               @RequestParam(value = "teacherid", defaultValue = "0") String teacherId, String from) {
-        Map<String, Object> paramMap = new HashMap<>();
+                               @RequestParam(value = "teacherId", defaultValue = "0") String teacherId, String from, HttpSession session) {
+        Map<String, Object> paramMap = new HashMap<>(10);
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
         if (!StringUtils.isEmpty(name)) {
             paramMap.put("name", name);
         }
+        //根据老师查询信息
         if (!"0".equals(teacherId)) {
             paramMap.put("teacherId", teacherId);
         }
+
+        /**
+         * 按星期几查询
+         */
+        if (!"".equals(weakday) && weakday != null){
+            paramMap.put("weakday",weakday);
+        }
+
+        //判断是不是老师，是老师的话就只加载这个了老师下的课程
+        //获取session中的user对象
+        User loginUser = (User) session.getAttribute(UserConstant.LOGIN_USER);
+        if (UserConstant.TEACHER_CODE.equals(loginUser.getUserType())){
+            //说明是老师
+            paramMap.put("teacherId", loginUser.getId());
+        }
+        //分页查询数据
         PageBean<Course> pageBean = courseService.queryPage(paramMap);
         if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();
@@ -64,8 +85,11 @@ public class CourseController {
      */
     @PostMapping("/addCourse")
     @ResponseBody
-    public ResultVO<Boolean> addCourse(Course course) {
-        int count = courseService.addCourse(course);
+    public ResultVO<Boolean> addCourse(Course course,HttpSession session) {
+        System.out.println(course);
+        //将用户身份一起传过去，用户判断
+        User loginUser = (User) session.getAttribute(UserConstant.LOGIN_USER);
+        int count = courseService.addCourse(course,loginUser.getUserType());
         if (count > 0) {
             return ResultVO.success();
         } else {
@@ -79,8 +103,11 @@ public class CourseController {
      */
     @PostMapping("/editCourse")
     @ResponseBody
-    public ResultVO<Boolean> editCourse(Course course) {
-        int count = courseService.editCourse(course);
+    public ResultVO<Boolean> editCourse(Course course,HttpSession session) {
+        System.out.println(course);
+        //将用户身份一起传过去，用户判断
+        User loginUser = (User) session.getAttribute(UserConstant.LOGIN_USER);
+        int count = courseService.editCourse(course,loginUser.getUserType());
         if (count > 0) {
             return ResultVO.success();
         } else {

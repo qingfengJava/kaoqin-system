@@ -11,17 +11,25 @@
     <select id="queryList" resultMap="ClazzInfo">
         SELECT *
         from s_clazz
-        <where>
-            <if test="name!=null">and name LIKE concat("%",#{name},"%")</if>
-        </where>
+        where 1=1
+        <if test="name!=null">
+          and name LIKE concat("%",#{name},"%")
+        </if>
+        <if test="id!=null">
+            and id=#{id}
+        </if>
         limit #{startIndex},#{pagesize}
     </select>
 
     <select id="queryCount" resultType="int">
         select count(*) from s_clazz
-        <where>
-            <if test="name!=null">and name LIKE concat("%",#{name},"%")</if>
-        </where>
+        where 1=1
+        <if test="name!=null">
+          and name LIKE concat("%",#{name},"%")
+        </if>
+        <if test="id!=null">
+            and id=#{id}
+        </if>
     </select>
 
 </mapper>

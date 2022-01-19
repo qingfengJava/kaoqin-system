@@ -30,9 +30,10 @@
         limit #{startIndex}, #{pagesize}
     </select>
 
-    <select id="queryCount" resultType="int">
+    <select id="queryStuCount" resultType="int">
         select count(*) from s_user
         where is_deleted = 0
+        and user_type = 2
         <if test="username != null">
             and username like concat("%",#{username},"%")
         </if>
@@ -40,11 +41,26 @@
             and class_id like concat("%",#{classId},"%")
         </if>
         <if test="studentId != null">
-            and id = #{studentid}
+            and id = #{studentId}
         </if>
-
     </select>
 
+    <select id="queryTenCount" resultType="int">
+        select count(*) from s_user
+        where is_deleted = 0
+        and user_type = 3
+        <if test="username != null">
+            and username like concat("%",#{username},"%")
+        </if>
+        <if test="classId != null">
+            and class_id like concat("%",#{classId},"%")
+        </if>
+        <if test="teacherId != null">
+            and id = #{teacherId}
+        </if>
+    </select>
+
+    <!-- 注意：学生列表只查询学生类型 -->
     <select id="getStudentList" resultType="com.qingfeng.entity.User">
         SELECT *
         from s_user

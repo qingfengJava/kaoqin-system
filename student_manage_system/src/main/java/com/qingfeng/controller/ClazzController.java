@@ -1,6 +1,8 @@
 package com.qingfeng.controller;
 
+import com.qingfeng.constants.UserConstant;
 import com.qingfeng.entity.Clazz;
+import com.qingfeng.entity.User;
 import com.qingfeng.service.ClazzService;
 import com.qingfeng.service.UserService;
 import com.qingfeng.utils.IdsData;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +50,7 @@ public class ClazzController {
     @PostMapping("/getClazzList")
     @ResponseBody
     public Object getClazzList(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                               @RequestParam(value = "rows", defaultValue = "10") Integer rows, String clazzName, String from) {
+                               @RequestParam(value = "rows", defaultValue = "10") Integer rows, String clazzName, String from, HttpSession session) {
         //map封装的是我们要查询的条件信息
         Map<String, Object> paramMap = new HashMap<>(10);
         paramMap.put("pageno", page);
@@ -56,6 +59,13 @@ public class ClazzController {
         if (!StringUtils.isEmpty(clazzName)) {
             paramMap.put("name", clazzName);
         }
+        //判断是不是教师，是教师的话只搜索当前教师下的专业
+        //获取session中的user对象
+        User loginUser = (User) session.getAttribute(UserConstant.LOGIN_USER);
+        if (UserConstant.TEACHER_CODE.equals(loginUser.getUserType()) || UserConstant.STUDENT_CODE.equals(loginUser.getUserType())){
+            paramMap.put("id",loginUser.getClassId());
+        }
+
         //根据条件分页查询
         PageBean<Clazz> pageBean = clazzService.queryPage(paramMap);
         //如果是combox直接返回

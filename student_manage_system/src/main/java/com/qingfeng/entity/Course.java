@@ -37,6 +37,11 @@ public class Course {
     private Integer teacherId;
 
     /**
+     * 星期几
+     */
+    private String weakday;
+
+    /**
      * 上课时间
      */
     private String courseDate;
@@ -49,7 +54,7 @@ public class Course {
     /**
      * 课程最大选课人数
      */
-    private Integer maxNum = 50;
+    private Integer maxNum;
 
     /**
      * 课程介绍

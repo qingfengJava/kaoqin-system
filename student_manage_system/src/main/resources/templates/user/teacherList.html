@@ -10,9 +10,8 @@
 	<script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
 	<script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
-		/*<![CDATA[*/
 		$(function() {
-			var table;
+			let table;
 			$('#dataList').datagrid({
 				title:'教师列表',
 				iconCls:'icon-more',
@@ -38,8 +37,8 @@
 					{field:'classId',title:'专业',width:150,
 						formatter: function(value,row,index){
 							if (row.classId){
-								var clazzList = $("#clazzList").combobox("getData");
-								for(var i=0;i<clazzList.length;i++ ){
+								let clazzList = $("#clazzList").combobox("getData");
+								for(let i=0;i<clazzList.length;i++ ){
 									if(row.classId === clazzList[i].id){
 										return clazzList[i].name;
 									}
@@ -63,7 +62,7 @@
 			});
 
 			//设置分页控件
-			var p = $('#dataList').datagrid('getPager');
+			let p = $('#dataList').datagrid('getPager');
 			$(p).pagination({
 				pageSize: 10,
 				pageList: [10,20,30,50,100],
@@ -82,7 +81,7 @@
 			$("#edit").click(function(){
 				table = $("#editTable");
 				// 勾选的行号,并非数据库的教师id
-				var selectRows = $("#dataList").datagrid("getSelections");
+				let selectRows = $("#dataList").datagrid("getSelections");
 				if(selectRows.length !== 1){
 					$.messager.alert("消息提醒", "请选择一条数据进行操作!", "warning");
 				} else{
@@ -92,12 +91,12 @@
 
 			//删除
 			$("#delete").click(function(){
-				var selectRows = $("#dataList").datagrid("getSelections");
-				var selectLength = selectRows.length;
+				let selectRows = $("#dataList").datagrid("getSelections");
+				let selectLength = selectRows.length;
 				if(selectLength === 0){
 					$.messager.alert("消息提醒", "请选择数据进行删除!", "warning");
 				} else{
-					var jsonObj = {};
+					let jsonObj = {};
 					$.each(selectRows,function(i,n){
 						jsonObj["ids["+i+"]"] = n.id;
 					});
@@ -236,7 +235,7 @@
 				url: "/clazz/getClazzList?from=combox",
 				onLoadSuccess: function(){
 					//默认选择第一条数据
-					var data = $(this).combobox("getData");
+					let data = $(this).combobox("getData");
 					$(this).combobox("setValue", data[0].id);
 				}
 			});
@@ -246,7 +245,7 @@
 				url: "/clazz/getClazzList?from=combox",
 				onLoadSuccess: function(){
 					//默认选择第一条数据
-					var data = $(this).combobox("getData");
+					let data = $(this).combobox("getData");
 					$(this).combobox("setValue", data[0].id);
 				}
 			});
@@ -274,8 +273,8 @@
 							if(!validate){
 								$.messager.alert("消息提醒","请检查你输入的数据!","warning");
 							} else{
-								var object = $("#dataList").datagrid("getSelected");
-								var formData = new FormData($( "#editForm" )[0]);
+								let object = $("#dataList").datagrid("getSelected");
+								let formData = new FormData($( "#editForm" )[0]);
 								formData.append("id", object.id);
 								$.ajax({
 									type: "post",
@@ -320,7 +319,7 @@
 					},
 				],
 				onBeforeOpen: function(){
-					var selectRow = $("#dataList").datagrid("getSelected");
+					let selectRow = $("#dataList").datagrid("getSelected");
 
 					//设置值
 					$("#edit_name").textbox('setValue', selectRow.username);
@@ -328,7 +327,7 @@
 					$("#edit_phone").textbox('setValue', selectRow.mobile);
 
 					$("#edit-id").val(selectRow.id);
-					var classId = selectRow.classId;
+					let classId = selectRow.classId;
 					setTimeout(function(){
 						$("#edit_clazzList").combobox('setValue', classId);
 					}, 100);
@@ -347,7 +346,6 @@
 				});
 			});
 		});
-		/*]]>*/
 	</script>
 </head>
 <body>

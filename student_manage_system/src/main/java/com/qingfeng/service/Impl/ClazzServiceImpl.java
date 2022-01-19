@@ -66,7 +66,7 @@ public class ClazzServiceImpl implements ClazzService {
         LambdaQueryWrapper<Clazz> wrapper = new LambdaQueryWrapper<Clazz>()
                 .eq(Clazz::getName, clazz.getName());
         List<Clazz> clazz2 = clazzMapper.selectList(wrapper);
-        if (clazz2 == null){
+        if (clazz2.size() == 0){
             //如果等于null，说明不存在可以添加
             return clazzMapper.insert(clazz);
         }

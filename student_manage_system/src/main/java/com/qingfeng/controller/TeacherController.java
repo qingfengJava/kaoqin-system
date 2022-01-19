@@ -33,11 +33,12 @@ public class TeacherController {
                                  @RequestParam(value = "rows", defaultValue = "100") Integer rows,
                                  @RequestParam(value = "classId", defaultValue = "0") String classId,
                                  String from, HttpSession session, String teacherName) {
-
-        Map<String, Object> paramMap = new HashMap<>();
+        //map存放的是分页查询教师的相关信息
+        Map<String, Object> paramMap = new HashMap<>(10);
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
 
+        //teacherName不为null，说明要按照指定的名字进行查询
         if (!StringUtils.isEmpty(teacherName)) {
             paramMap.put("username", teacherName);
         }

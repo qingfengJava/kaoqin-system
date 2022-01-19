@@ -243,7 +243,7 @@
 
 <!-- 工具栏 -->
 <div id="toolbar">
-    <div style="float: left;">
+    <div th:if="${session.loginUser.userType == '1'}" style="float: left;">
         <a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
         </div>
     <div style="float: left; margin-right: 10px;">

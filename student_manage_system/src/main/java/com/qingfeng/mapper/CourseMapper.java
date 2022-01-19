@@ -13,8 +13,18 @@ import java.util.Map;
 @Repository
 public interface CourseMapper extends BaseMapper<Course> {
 
+    /**
+     * 分页条件查询课程信息
+     * @param paramMap
+     * @return
+     */
     List<Course> queryList(Map<String, Object> paramMap);
 
+    /**
+     * 查询课程总记录数
+     * @param paramMap
+     * @return
+     */
     Integer queryCount(Map<String, Object> paramMap);
 
     int addStudentNum(Integer courseId);
@@ -22,4 +32,17 @@ public interface CourseMapper extends BaseMapper<Course> {
     void deleteStudentNum(Integer courseId);
 
     List<Course> getCourseById(List<Integer> ids);
+
+    /**
+     * 条件查询课程信息
+     * @param paramMap
+     * @return
+     */
+    Course queryCourse(Map<String, Object> paramMap);
+
+    /**
+     * 删除学生选课的选课信息
+     * @param id
+     */
+    void deleteByCourseId(Integer id);
 }

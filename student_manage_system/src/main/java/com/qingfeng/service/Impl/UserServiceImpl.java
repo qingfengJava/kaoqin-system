@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<User>()
                 .eq(User::getUsername, user.getUsername());
         List<User> users = userMapper.selectList(wrapper);
-        if (users == null){
+        if (users .size() == 0){
             //说明可以添加
             //给这个用户生成随机盐
             String salt = SaltUtil.getSalt(8);
@@ -85,11 +85,16 @@ public class UserServiceImpl implements UserService {
         List<User> users = userMapper.getStudentList(paramMap);
         pageBean.setDatas(users);
 
-        Integer totalSize = userMapper.queryCount(paramMap);
+        Integer totalSize = userMapper.queryStuCount(paramMap);
         pageBean.setTotalsize(totalSize);
         return pageBean;
     }
 
+    /**
+     * 分页查询教师信息
+     * @param paramMap 查询参数
+     * @return
+     */
     @Override
     public PageBean<User> getTeacherPage(Map<String, Object> paramMap) {
         PageBean<User> pageBean = new PageBean<>((Integer) paramMap.get("pageno"), (Integer) paramMap.get("pagesize"));
@@ -97,11 +102,11 @@ public class UserServiceImpl implements UserService {
         Integer startIndex = pageBean.getStartIndex();
         paramMap.put("startIndex", startIndex);
 
-        // 获取所有学生列表
+        // 获取所有教师列表
         List<User> users = userMapper.getTeacherList(paramMap);
         pageBean.setDatas(users);
-
-        Integer totalSize = userMapper.queryCount(paramMap);
+        //查询总记录数
+        Integer totalSize = userMapper.queryTenCount(paramMap);
         pageBean.setTotalsize(totalSize);
         return pageBean;
     }

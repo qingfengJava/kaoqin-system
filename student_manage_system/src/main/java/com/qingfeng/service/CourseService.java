@@ -10,12 +10,34 @@ import java.util.Map;
  * @author 清风学Java
  */
 public interface CourseService {
+    /**
+     * 分页查询课程数据
+     * @param paramMap
+     * @return
+     */
     PageBean<Course> queryPage(Map<String, Object> paramMap);
 
-    int addCourse(Course course);
+    /**
+     * 添加课程信息
+     * @param course
+     * @param userType
+     * @return
+     */
+    int addCourse(Course course,String userType);
 
-    int editCourse(Course course);
+    /**
+     * 更新课程信息
+     * @param course
+     * @param userType
+     * @return
+     */
+    int editCourse(Course course,String userType);
 
+    /**
+     * 根据Id删除课程
+     * @param ids
+     * @return
+     */
     int deleteCourse(List<Integer> ids);
 
     List<Course> getCourseById(List<Integer> ids);

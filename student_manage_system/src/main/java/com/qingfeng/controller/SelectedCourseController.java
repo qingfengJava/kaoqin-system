@@ -1,17 +1,22 @@
 package com.qingfeng.controller;
 
 import com.qingfeng.constants.UserConstant;
+import com.qingfeng.entity.Course;
 import com.qingfeng.entity.SelectedCourse;
 import com.qingfeng.entity.User;
+import com.qingfeng.service.CourseService;
 import com.qingfeng.service.SelectedCourseService;
 import com.qingfeng.utils.PageBean;
 import com.qingfeng.utils.ResultVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,12 +26,14 @@ import java.util.Map;
 @RequestMapping("/selectedCourse")
 public class SelectedCourseController {
 
-    private final SelectedCourseService selectedCourseService;
+    private SelectedCourseService selectedCourseService;
+    private CourseService courseService;
 
-    public SelectedCourseController(SelectedCourseService selectedCourseService) {
+    @Autowired
+    public SelectedCourseController(SelectedCourseService selectedCourseService, CourseService courseService) {
         this.selectedCourseService = selectedCourseService;
+        this.courseService = courseService;
     }
-
 
     @GetMapping("/selectedCourse_list")
     public String selectedCourseList() {
@@ -42,12 +49,15 @@ public class SelectedCourseController {
                                @RequestParam(value = "rows", defaultValue = "100") Integer rows,
                                @RequestParam(value = "studentId", defaultValue = "0") String studentId,
                                @RequestParam(value = "courseId", defaultValue = "0") String courseId, String from, HttpSession session) {
-        Map<String, Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>(16);
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
+
+        //判断有没有学生Id这个信息，有就要根据这个信息进行查询
         if (!"0".equals(studentId)) {
             paramMap.put("studentId", studentId);
         }
+        //判断有没有课程Id这个信息，有就要根据课程Id进行查询
         if (!"0".equals(courseId)) {
             paramMap.put("courseId", courseId);
         }
@@ -56,6 +66,10 @@ public class SelectedCourseController {
         if (UserConstant.STUDENT_CODE.equals(user.getUserType())) {
             //是学生权限，只能查询自己的信息
             paramMap.put("studentId", user.getId());
+        }
+        if(UserConstant.TEACHER_CODE.equals(user.getUserType())){
+            //教师只能查询自己课程下的信息
+            paramMap.put("teacherId", user.getId());
         }
         PageBean<SelectedCourse> pageBean = selectedCourseService.queryPage(paramMap);
         System.out.println(paramMap);
@@ -78,6 +92,15 @@ public class SelectedCourseController {
     @PostMapping("/addSelectedCourse")
     @ResponseBody
     public ResultVO<Boolean> addSelectedCourse(SelectedCourse selectedCourse) {
+        //先根据课程Id吧对应的教室id查询出来
+        List<Integer> ids = new ArrayList<>();
+        ids.add(selectedCourse.getCourseId());
+        List<Course> courseById = courseService.getCourseById(ids);
+        //因为只有一个Id，因此只会查询到一个数据
+        for (Course course : courseById) {
+            selectedCourse.setTeacherId(course.getTeacherId());
+        }
+
         int count = selectedCourseService.addSelectedCourse(selectedCourse);
         if (count == 1) {
             return ResultVO.success();
@@ -96,6 +119,7 @@ public class SelectedCourseController {
     @PostMapping("/deleteSelectedCourse")
     @ResponseBody
     public ResultVO<Boolean> deleteSelectedCourse(Integer id) {
+        //根据Id删除选课信息
         int count = selectedCourseService.deleteSelectedCourse(id);
         if (count > 0) {
             return ResultVO.success();

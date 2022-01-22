@@ -35,6 +35,7 @@
                         formatter: function(value,row,index){
                         console.log(row.studentId);
                             if (row.studentId){
+                                //拿到工具栏的数据进行比较
                                 let studentList = $("#studentList").combobox("getData");
                                 for(let i=0;i<studentList.length;i++ ){
                                     console.log("heh2"+studentList[i]);
@@ -51,9 +52,12 @@
                     {field:'courseId',title:'课程',width:200,
                         formatter: function(value,row,index){
                             if (row.courseId){
+                                //拿到工具栏的数据进行比较
                                 let courseList = $("#courseList").combobox("getData");
                                 for(let i=0;i<courseList.length;i++ ){
-                                    if(row.courseId === courseList[i].id)return courseList[i].name;
+                                    if(row.courseId === courseList[i].id){
+                                        return courseList[i].name;
+                                    }
                                 }
                                 return row.courseId;
                             } else {
@@ -97,7 +101,7 @@
             }
 
             //设置分页控件
-            var p = $('#dataList').datagrid('getPager');
+            let p = $('#dataList').datagrid('getPager');
             $(p).pagination({
                 pageSize: 10,//每页显示的记录条数，默认为10
                 pageList: [10,20,30,50,100],//可以设置每页记录条数的列表
@@ -113,8 +117,8 @@
 
             //设置编辑按钮
             $("#edit").click(function(){
-                table = $("#editTable");
-                var selectRows = $("#dataList").datagrid("getSelections");
+                let table = $("#editTable");
+                let selectRows = $("#dataList").datagrid("getSelections");
                 if(selectRows.length !== 1){
                     $.messager.alert("消息提醒", "请选择一条数据进行操作!", "warning");
                 } else{
@@ -125,11 +129,11 @@
 
             //删除
             $("#delete").click(function(){
-                var selectRow = $("#dataList").datagrid("getSelected");
+                let selectRow = $("#dataList").datagrid("getSelected");
                 if(selectRow == null){
                     $.messager.alert("消息提醒", "请选择数据进行删除!", "warning");
                 } else{
-                    var id = selectRow.id;
+                    let id = selectRow.id;
                     $.messager.confirm("消息提醒", "将删除与课程相关的所有数据，确认继续？", function(r){
                         if(r){
                             $.ajax({
@@ -137,14 +141,16 @@
                                 url: "/selectedCourse/deleteSelectedCourse",
                                 data: {id: id},
                                 success: function(msg){
-                                    if(msg === "success"){
+                                    if(msg === "操作成功"){
                                         $.messager.alert("消息提醒","删除成功!","info");
-                                        //刷新表格
-                                        $("#dataList").datagrid("reload");
+                                        //刷新界面
+                                        $('#dataList').datagrid("reload");
                                     }else if(msg === "not found"){
                                         $.messager.alert("消息提醒","不存在该选课记录!","info");
+                                        $('#dataList').datagrid("reload");
                                     }else{
                                         $.messager.alert("消息提醒","删除失败!","warning");
+                                        $('#dataList').datagrid("reload");
                                     }
                                 }
                             });
@@ -171,7 +177,7 @@
                         plain: true,
                         iconCls:'icon-book-add',
                         handler:function(){
-                            var validate = $("#addForm").form("validate");
+                            let validate = $("#addForm").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
                             } else{
@@ -235,7 +241,7 @@
                 url: "/student/list?form=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
-                    var data = $(this).combobox("getData");
+                    let data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                 }
             });
@@ -245,7 +251,7 @@
                 url: "/course/getCourseList?from=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
-                    var data = $(this).combobox("getData");
+                    let data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                 }
             });
@@ -253,12 +259,11 @@
             //搜索按钮监听事件
             $("#search-btn").click(function(){
                 $('#dataList').datagrid('load',{
-                    studentid: $("#studentList").combobox('getValue') == '' ? 0 : $("#studentList").combobox('getValue'),
-                    courseid: $("#courseList").combobox('getValue') == '' ? 0 : $("#courseList").combobox('getValue')
+                    studentId: $("#studentList").combobox('getValue') == '' ? 0 : $("#studentList").combobox('getValue'),
+                    courseId: $("#courseList").combobox('getValue') == '' ? 0 : $("#courseList").combobox('getValue')
                 });
             });
         });
-        /*]]>*/
     </script>
 </head>
 <body>

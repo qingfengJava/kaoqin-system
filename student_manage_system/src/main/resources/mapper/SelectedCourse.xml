@@ -15,6 +15,7 @@
             <if test="studentId!=null">and student_id LIKE concat("%",#{studentId},"%")</if>
             <if test="courseId!=null">and course_id LIKE concat("%",#{courseId},"%")</if>
             <if test="studentid!=null">and student_id = #{studentid}</if>
+            <if test="teacherId!=null">and teacher_id = #{teacherId}</if>
         </where>
         limit #{startIndex},#{pagesize}
     </select>
@@ -25,6 +26,7 @@
             <if test="studentId!=null">and student_id LIKE concat("%",#{studentId},"%")</if>
             <if test="courseId!=null">and course_id LIKE concat("%",#{courseId},"%")</if>
             <if test="studentid!=null">and student_id = #{studentid}</if>
+            <if test="teacherId!=null">and teacher_id = #{teacherId}</if>
         </where>
     </select>
 

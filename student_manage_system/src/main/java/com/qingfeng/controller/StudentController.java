@@ -72,10 +72,6 @@ public class StudentController {
             // 只能查询自己的信息
             paramMap.put("studentId", loginUser.getId());
         }
-        if(UserConstant.TEACHER_CODE.equals(loginUser.getUserType())) {
-            //如果是教师，要查询改教师下的学生
-            paramMap.put("classId",loginUser.getClassId());
-        }
 
         //分页查询数据
         PageBean<User> pageBean = userService.getStudentPage(paramMap);

@@ -307,7 +307,7 @@
                 url: "/teacher/list?from=combox",
                 onLoadSuccess: function () {
                     //默认选择第一条数据
-                    var data = $(this).combobox("getData");
+                    let data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                 }
             });

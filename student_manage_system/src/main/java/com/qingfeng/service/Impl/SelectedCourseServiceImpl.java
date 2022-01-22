@@ -30,15 +30,22 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
         this.courseMapper = courseMapper;
     }
 
+    /**
+     *条件查询学生选课信息
+     * @param paramMap
+     * @return
+     */
     @Override
     public PageBean<SelectedCourse> queryPage(Map<String, Object> paramMap) {
         PageBean<SelectedCourse> pageBean = new PageBean<>((Integer) paramMap.get("pageno"), (Integer) paramMap.get("pagesize"));
 
         Integer startIndex = pageBean.getStartIndex();
         paramMap.put("startIndex", startIndex);
+        //查询学生选课信息
         List<SelectedCourse> datas = selectedCourseMapper.queryList(paramMap);
         pageBean.setDatas(datas);
 
+        //查询总记录数
         Integer totalsize = selectedCourseMapper.queryCount(paramMap);
         pageBean.setTotalsize(totalsize);
         return pageBean;
@@ -47,12 +54,16 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int addSelectedCourse(SelectedCourse selectedCourse) {
+        //封装我们要添加的数据
         LambdaQueryWrapper<SelectedCourse> wrapper = new LambdaQueryWrapper<SelectedCourse>()
                 .eq(SelectedCourse::getStudentId, selectedCourse.getStudentId())
-                .eq(SelectedCourse::getCourseId, selectedCourse.getCourseId());
+                .eq(SelectedCourse::getCourseId, selectedCourse.getCourseId())
+                .eq(SelectedCourse::getTeacherId,selectedCourse.getTeacherId());
+        //查询是否有这条信息
         SelectedCourse selectOne = selectedCourseMapper.selectOne(wrapper);
 
         if (Objects.isNull(selectOne)) {
+            //没有说明可以添加
             int count = courseMapper.addStudentNum(selectedCourse.getCourseId());
             if (count == 1) {
                 selectedCourseMapper.insert(selectedCourse);
@@ -70,6 +81,7 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int deleteSelectedCourse(Integer selectedCourseId) {
+        //删除前检查是否存在  健壮性处理
         SelectedCourse selectedCourse = selectedCourseMapper.selectById(selectedCourseId);
         if (Objects.isNull(selectedCourse)) {
             return -1;

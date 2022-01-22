@@ -14,8 +14,18 @@ import java.util.Map;
  */
 @Repository
 public interface SelectedCourseMapper extends BaseMapper<SelectedCourse> {
+    /**
+     * 条件查询学生选课信息
+     * @param paramMap
+     * @return
+     */
     List<SelectedCourse> queryList(Map<String, Object> paramMap);
 
+    /**
+     * 条件查询总记录数
+     * @param paramMap
+     * @return
+     */
     int queryCount(Map<String, Object> paramMap);
 
     int addSelectedCourse(SelectedCourse selectedCourse);

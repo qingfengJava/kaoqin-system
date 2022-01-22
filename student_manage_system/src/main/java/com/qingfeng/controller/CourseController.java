@@ -42,7 +42,8 @@ public class CourseController {
                                @RequestParam(value = "rows", defaultValue = "100") Integer rows,
                                @RequestParam(value = "weakday", defaultValue = "") String weakday,
                                String name,
-                               @RequestParam(value = "teacherId", defaultValue = "0") String teacherId, String from, HttpSession session) {
+                               @RequestParam(value = "teacherId", defaultValue = "0") String teacherId,
+                               String from, HttpSession session) {
         Map<String, Object> paramMap = new HashMap<>(10);
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
@@ -54,9 +55,7 @@ public class CourseController {
             paramMap.put("teacherId", teacherId);
         }
 
-        /**
-         * 按星期几查询
-         */
+        //按星期几查询
         if (!"".equals(weakday) && weakday != null){
             paramMap.put("weakday",weakday);
         }
@@ -86,7 +85,6 @@ public class CourseController {
     @PostMapping("/addCourse")
     @ResponseBody
     public ResultVO<Boolean> addCourse(Course course,HttpSession session) {
-        System.out.println(course);
         //将用户身份一起传过去，用户判断
         User loginUser = (User) session.getAttribute(UserConstant.LOGIN_USER);
         int count = courseService.addCourse(course,loginUser.getUserType());

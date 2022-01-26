@@ -59,6 +59,41 @@ public class ClazzController {
         if (!StringUtils.isEmpty(clazzName)) {
             paramMap.put("name", clazzName);
         }
+
+        //根据条件分页查询
+        PageBean<Clazz> pageBean = clazzService.queryPage(paramMap);
+        //如果是combox直接返回
+        if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
+            return pageBean.getDatas();
+        } else {
+            Map<String, Object> result = new HashMap<>(10);
+            result.put("total", pageBean.getTotalsize());
+            result.put("rows", pageBean.getDatas());
+            return result;
+        }
+    }
+
+    /**
+     * 用于教师专业列表展示的
+     * @param page
+     * @param rows
+     * @param clazzName
+     * @param from
+     * @param session
+     * @return
+     */
+    @PostMapping("/getClazz")
+    @ResponseBody
+    public Object getClazz(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                               @RequestParam(value = "rows", defaultValue = "10") Integer rows, String clazzName, String from, HttpSession session) {
+        //map封装的是我们要查询的条件信息
+        Map<String, Object> paramMap = new HashMap<>(10);
+        paramMap.put("pageno", page);
+        paramMap.put("pagesize", rows);
+        //判断是否有专业名称，有就是按条件搜索，没有就是全局搜索
+        if (!StringUtils.isEmpty(clazzName)) {
+            paramMap.put("name", clazzName);
+        }
         //判断是不是教师，是教师的话只搜索当前教师下的专业
         //获取session中的user对象
         User loginUser = (User) session.getAttribute(UserConstant.LOGIN_USER);

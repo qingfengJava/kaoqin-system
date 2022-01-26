@@ -38,6 +38,18 @@ public class Attendance {
     private String type = "正常";
 
     /**
+     * 上课日期
+     */
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd 00:00:00", timezone = "GMT+8")
+    private Date courseDate;
+
+    /**
+     * 上课星期
+     */
+    private String  courseWeak;
+
+    /**
      * 签到时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

@@ -81,12 +81,21 @@ public class UserServiceImpl implements UserService {
         Integer startIndex = pageBean.getStartIndex();
         paramMap.put("startIndex", startIndex);
 
-        // 获取所有学生列表
-        List<User> users = userMapper.getStudentList(paramMap);
-        pageBean.setDatas(users);
+        //学生的
+        if (paramMap.get("teacherId") == null){
+            // 获取所有学生列表
+            List<User> users = userMapper.getStudentList(paramMap);
+            pageBean.setDatas(users);
+            Integer totalSize = userMapper.queryStuCount(paramMap);
+            pageBean.setTotalsize(totalSize);
+        }else{
+            // 有老师的
+            List<User> users = userMapper.getStudentListByTeacherId(paramMap);
+            pageBean.setDatas(users);
+            Integer totalSize = userMapper.queryStuCountByTeacherId(paramMap);
+            pageBean.setTotalsize(totalSize);
+        }
 
-        Integer totalSize = userMapper.queryStuCount(paramMap);
-        pageBean.setTotalsize(totalSize);
         return pageBean;
     }
 

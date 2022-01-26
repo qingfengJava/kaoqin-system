@@ -42,5 +42,11 @@ public interface SelectedCourseService {
 
     List<SelectedCourse> getAllBySid(Integer studentId);
 
+    /**
+     * 根据学生Id，课程Id查询学生选择的课程信息
+     * @param studentId
+     * @param courseId
+     * @return
+     */
     Course getCourseDetail(Integer studentId, Integer courseId);
 }

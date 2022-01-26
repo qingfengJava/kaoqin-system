@@ -67,6 +67,11 @@ public class CourseController {
             //说明是老师
             paramMap.put("teacherId", loginUser.getId());
         }
+        //学生只加载学生下的课程列表
+        if (UserConstant.STUDENT_CODE.equals(loginUser.getUserType())){
+            //说明是老师
+            paramMap.put("studentId", loginUser.getId());
+        }
         //分页查询数据
         PageBean<Course> pageBean = courseService.queryPage(paramMap);
         if (!StringUtils.isEmpty(from) && "combox".equals(from)) {

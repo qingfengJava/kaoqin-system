@@ -9,6 +9,7 @@
     <script type="text/javascript" th:src="@{/easyui/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
     <script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
+
     <script type="text/javascript" th:inline="javascript">
         $(function() {
             $('#dataList').datagrid({
@@ -60,6 +61,8 @@
                             }
                         }
                     },
+                    {field:'courseDate',title:'上课日期',width:200, sortable: false},
+                    {field:'courseWeak',title:'上课星期',width:200, sortable: false},
                     {field:'type',title:'签到类型',width:200, sortable: false},
                     {field:'date',title:'签到日期',width:200, sortable: false}
                 ]
@@ -75,19 +78,19 @@
             // 提前加载学生和课程信息
             function preLoadClazz(){
                 $("#studentList").combobox({
-                    width: "80",
-                    height: "25",
+                    width: "200",
+                    height: "30",
                     valueField: "id",
                     textField: "username",
                     multiple: false, //可多选
                     editable: false, //不可编辑
                     method: "post",
-                    url: "/student/list?from=combox",
+                    url: "/student/list?form=combox",
 
                 });
                 $("#courseList").combobox({
-                    width: "80",
-                    height: "25",
+                    width: "200",
+                    height: "30",
                     valueField: "id",
                     textField: "name",
                     multiple: false,
@@ -98,7 +101,7 @@
             }
 
             // 设置分页控件
-            var p = $('#dataList').datagrid('getPager');
+            let p = $('#dataList').datagrid('getPager');
             $(p).pagination({
                 pageSize: 10,
                 pageList: [10,20,30,50,100],
@@ -114,17 +117,17 @@
 
             // 补签
             $("#edit").click(function(){
-                var selectRow = $("#dataList").datagrid("getSelected");
+                let selectRow = $("#dataList").datagrid("getSelected");
                 console.log(selectRow);
                 if(selectRow == null){
                     $.messager.alert("消息提醒", "请选择数据进行补签!", "warning");
                 } else{
-                    var id = selectRow.id;
+                    let id = selectRow.id;
                     $.messager.confirm("消息提醒", "若签到类型为补签，可能会出现错误，确认继续？", function(r){
                         if(r){
                             $.ajax({
                                 type: "post",
-                                url: "reissue",
+                                url: "/attendance/reissue",
                                 data: {id: id},
                                 success: function(data){
                                     if(data.success){
@@ -159,7 +162,7 @@
                         plain: true,
                         iconCls:'icon-book-add',
                         handler:function(){
-                            var validate = $("#addForm").form("validate");
+                            let validate = $("#addForm").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
                             } else{
@@ -223,7 +226,7 @@
                 url: "/student/list?form=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
-                    var data = $(this).combobox("getData");
+                    let data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                     getStudentSelectedCourseList(data[0].id);
                 },
@@ -237,7 +240,8 @@
                 url: "/course/getCourseList?from=combox",
                 onLoadSuccess: function(){
                     // 默认选择第一条数据
-                    var data = $(this).combobox("getData");
+                    let data = $(this).combobox("getData");
+                    console.log("添加课程信息："+data);
                     $(this).combobox("setValue", data[0].id);
                 }
 
@@ -247,12 +251,12 @@
             function getStudentSelectedCourseList(sid){
                 // 添加课程选择框
                 console.log("sid:", sid);
-                var u = "getStudentSelectedCourseList";
+                let u = "getStudentSelectedCourseList";
                 $("#add_courseList").combobox({
                     url:u+"?studentId="+sid,
                     onLoadSuccess: function(){
                         // 默认选择第一条数据
-                        var data = $(this).combobox("getData");
+                        let data = $(this).combobox("getData");
                         console.log("getData:", data);
                         $(this).combobox("setValue", data[0].id);
                     }
@@ -264,8 +268,8 @@
                 $('#dataList').datagrid('load',{
                     studentId: $("#studentList").combobox('getValue') === '' ? 0 : $("#studentList").combobox('getValue'),
                     courseId: $("#courseList").combobox('getValue') === '' ? 0 : $("#courseList").combobox('getValue'),
-                    type: $("#typeList").combobox('getValue') === '' ? '' : $("#typeList").combobox('getValue'),
-                    date:$("#date").datebox('getValue')
+                    type: $("#typeList").val() === '' ? '' : $("#typeList").val(),
+                    courseDate:$("#date").datebox('getValue') === '' ? '' : $("#date").datebox('getValue')
                 });
             });
         });
@@ -284,10 +288,10 @@
     </div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="margin-top: 3px;">
-        学生：<input id="studentList" class="easyui-textbox" name="studentList" />
-        课程：<input id="courseList" class="easyui-textbox" name="courseList" />
-        类型：<input id="typeList" class="easyui-textbox" name="typeList" />
-        时间：<input id="date" class="easyui-datebox" name="date" />
+        学生：<input id="studentList" class="easyui-textbox" name="studentId" />
+        课程：<input id="courseList" class="easyui-textbox" name="courseId" />
+        类型：<input id="typeList" class="easyui-textbox" name="type" />
+        时间：<input id="date" class="easyui-datebox" name="courseDate" />
         <a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
         <a id="clear-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">清空搜索</a>
     </div>
@@ -312,7 +316,27 @@
                 <td style="width:80px"></td>
             </tr>
             <tr>
-                <td style="width:80px"></td>
+                <td style="width:80px">
+                    上课日期：
+                </td>
+                <td>
+                    <input class="easyui-datebox" name="courseDate" style="width:200px;height:30px;border-color: #9dc7e7" />
+                </td>
+            </tr>
+            <tr>
+                <td>上课星期：</td>
+                <td>
+                    <select id="add_weakday" name="courseWeak" style="width:200px;height:30px;border-color: #9dc7e7">
+                        <option selected></option>
+                        <option>星期一</option>
+                        <option>星期二</option>
+                        <option>星期三</option>
+                        <option>星期四</option>
+                        <option>星期五</option>
+                        <option>星期六</option>
+                        <option>星期天</option>
+                    </select>
+                </td>
             </tr>
         </table>
     </form>

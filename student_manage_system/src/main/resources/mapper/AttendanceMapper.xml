@@ -6,6 +6,8 @@
         <result column="id" property="id"/>
         <result column="course_id" property="courseId"/>
         <result column="student_id" property="studentId"/>
+        <result column="course_date" property="courseDate"/>
+        <result column="course_weak" property="courseWeak"/>
         <result column="type" property="type"/>
         <result column="date" property="date"/>
     </resultMap>
@@ -23,10 +25,32 @@
         <if test="type != null">
             and type = #{type}
         </if>
-        <if test="date != null">
-            and date = #{date}
+        <if test="courseDate != null">
+            and course_date = #{courseDate}
         </if>
         limit #{startIndex},#{pagesize}
+    </select>
+
+    <select id="queryListByTeacherId" resultMap="AttendanceInfo">
+        select sa.*
+        from s_attendance sa
+        INNER JOIN s_selected_course ssc on sa.student_id = ssc.student_id
+                                                and sa.course_id = ssc.course_id
+                                                and ssc.teacher_id = #{teacherId}
+        <if test="courseId != null">
+            and sa.course_id = #{courseId}
+        </if>
+        <if test="studentId != null">
+            and sa.student_id = #{studentId}
+        </if>
+        <if test="type != null">
+            and sa.type = #{type}
+        </if>
+        <if test="courseDate != null">
+            and sa.course_date = #{courseDate}
+        </if>
+        limit #{startIndex},#{pagesize}
+
     </select>
 
     <select id="queryCount" resultType="int">
@@ -41,10 +65,29 @@
             <if test="type!=null">
             and type = #{type}
             </if>
-            <if test="date!=null">
+            <if test="courseDate!=null">
             and date = #{date}
             </if>
         </where>
+    </select>
+    <select id="queryCountByTeacherId" resultType="java.lang.Integer">
+        select count(*)
+        from s_attendance sa
+        INNER JOIN s_selected_course ssc on sa.student_id = ssc.student_id
+        and sa.course_id = ssc.course_id
+        and ssc.teacher_id = #{teacherId}
+        <if test="courseId != null">
+            and sa.course_id = #{courseId}
+        </if>
+        <if test="studentId != null">
+            and sa.student_id = #{studentId}
+        </if>
+        <if test="type != null">
+            and sa.type = #{type}
+        </if>
+        <if test="courseDate != null">
+            and sa.course_date = #{courseDate}
+        </if>
     </select>
 
     <update id="reissue">

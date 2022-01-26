@@ -31,12 +31,24 @@ public class CourseServiceImpl implements CourseService {
 
         Integer startIndex = pageBean.getStartIndex();
         paramMap.put("startIndex", startIndex);
-        //分页查询数据
-        List<Course> datas = courseMapper.queryList(paramMap);
-        pageBean.setDatas(datas);
-        //查询总记录数
-        Integer totalsize = courseMapper.queryCount(paramMap);
-        pageBean.setTotalsize(totalsize);
+
+        if (paramMap.get("studentId") != null){
+            //有学生Id，就只查询学生自己选择的课程
+            //分页查询数据
+            List<Course> datas = courseMapper.queryListByStudentId(paramMap);
+            pageBean.setDatas(datas);
+            //查询总记录数
+            Integer totalsize = courseMapper.queryCountByStudentId(paramMap);
+            pageBean.setTotalsize(totalsize);
+        }else {
+            //分页查询数据
+            List<Course> datas = courseMapper.queryList(paramMap);
+            pageBean.setDatas(datas);
+            //查询总记录数
+            Integer totalsize = courseMapper.queryCount(paramMap);
+            pageBean.setTotalsize(totalsize);
+        }
+
         return pageBean;
     }
 

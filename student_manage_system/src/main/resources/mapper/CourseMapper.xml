@@ -15,11 +15,21 @@
     <select id="queryList" resultMap="CourseInfo">
         SELECT *
         from s_course
-        <where>
-            <if test="name!=null">and name LIKE concat("%",#{name},"%")</if>
-            <if test="teacherId!=null">and teacher_id LIKE concat("%",#{teacherId},"%")</if>
-            <if test="weakday!=null">and weakday LIKE concat("%",#{weakday},"%")</if>
-        </where>
+        where 1=1
+        <if test="name!=null"> and name LIKE concat("%",#{name},"%")</if>
+        <if test="teacherId!=null"> and teacher_id = #{teacherId}</if>
+        <if test="weakday!=null"> and weakday LIKE concat("%",#{weakday},"%")</if>
+
+        limit #{startIndex},#{pagesize}
+    </select>
+
+    <select id="queryListByStudentId" resultMap="CourseInfo">
+        select sc.*
+        from s_course sc
+                 INNER JOIN s_selected_course ssc on sc.id = ssc.course_id and ssc.student_id = #{studentId}
+        <if test="name!=null">and sc.name LIKE concat("%",#{name},"%")</if>
+        <if test="teacherId!=null">and sc.teacher_id LIKE concat("%",#{teacherId},"%")</if>
+        <if test="weakday!=null">and sc.weakday LIKE concat("%",#{weakday},"%")</if>
         limit #{startIndex},#{pagesize}
     </select>
 
@@ -64,6 +74,17 @@
             <if test="weakday!=null">and weakday LIKE concat("%",#{weakday},"%")</if>
         </where>
     </select>
+    <select id="queryCountByStudentId" resultType="java.lang.Integer">
+        select count(*)
+        from s_course sc
+        INNER JOIN s_selected_course ssc on sc.id = ssc.course_id and ssc.student_id = #{studentId}
+        <if test="name!=null">and sc.name LIKE concat("%",#{name},"%")</if>
+        <if test="teacherId!=null">and sc.teacher_id LIKE concat("%",#{teacherId},"%")</if>
+        <if test="weakday!=null">and sc.weakday LIKE concat("%",#{weakday},"%")</if>
+        limit #{startIndex},#{pagesize}
+    </select>
+    <select id="queryListByTeacherId"
+            resultType="com.qingfeng.entity.Course"></select>
 
     <delete id="deleteByCourseId">
         delete from s_selected_course where course_id = #{id}

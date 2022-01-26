@@ -40,5 +40,11 @@ public interface SelectedCourseMapper extends BaseMapper<SelectedCourse> {
 
     List<SelectedCourse> getAllBySid(Integer studentid);
 
+    /**
+     * 根据学生Id，课程Id，查询学生选择的课程信息
+     * @param studentId
+     * @param courseId
+     * @return
+     */
     Course getCourseDetail(@Param("studentId") Integer studentId, @Param("courseId") Integer courseId);
 }

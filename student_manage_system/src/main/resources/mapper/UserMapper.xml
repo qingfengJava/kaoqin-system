@@ -78,6 +78,23 @@
         limit #{startIndex}, #{pagesize}
     </select>
 
+    <!-- 查询教师下的学生列表 -->
+    <select id="getStudentListByTeacherId" resultType="com.qingfeng.entity.User">
+        select DISTINCT su.*
+        from s_user su
+                 INNER JOIN s_selected_course ssc on su.id = ssc.student_id and ssc.teacher_id = #{teacherId}
+        <if test="username != null">
+            and username like concat("%",#{username},"%")
+        </if>
+        <if test="classId != null">
+            and class_id like concat("%",#{classId},"%")
+        </if>
+        <if test="studentId != null">
+            and id = #{studentId}
+        </if>
+        limit #{startIndex}, #{pagesize}
+    </select>
+
     <select id="getTeacherList" resultType="com.qingfeng.entity.User">
         SELECT *
         from s_user
@@ -94,4 +111,22 @@
         </if>
         limit #{startIndex}, #{pagesize}
     </select>
+
+    <!-- 老师下查询学生的信息总数 -->
+    <select id="queryStuCountByTeacherId"  resultType="java.lang.Integer">
+        select DISTINCT count(*)
+        from s_user su
+        INNER JOIN s_selected_course ssc on su.id = ssc.student_id and ssc.teacher_id = #{teacherId}
+        <if test="username != null">
+            and username like concat("%",#{username},"%")
+        </if>
+        <if test="classId != null">
+            and class_id like concat("%",#{classId},"%")
+        </if>
+        <if test="studentId != null">
+            and id = #{studentId}
+        </if>
+        limit #{startIndex}, #{pagesize}
+    </select>
+
 </mapper>

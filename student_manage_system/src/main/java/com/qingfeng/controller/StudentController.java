@@ -67,10 +67,14 @@ public class StudentController {
         }
         //获取session中的user对象
         User loginUser = (User) session.getAttribute(UserConstant.LOGIN_USER);
-        //判断是不是学生，学生只能查询自己的信息  不是学生就全局查询
+        //判断是不是学生，学生只能查询自己的信息
         if (UserConstant.STUDENT_CODE.equals(loginUser.getUserType())) {
             // 只能查询自己的信息
             paramMap.put("studentId", loginUser.getId());
+        }
+        //判断是不是老师，老师只能查询自己的信息
+        if (UserConstant.TEACHER_CODE.equals(loginUser.getUserType())) {
+            paramMap.put("teacherId", loginUser.getId());
         }
 
         //分页查询数据

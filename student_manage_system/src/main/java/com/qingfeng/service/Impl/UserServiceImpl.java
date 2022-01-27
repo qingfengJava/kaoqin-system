@@ -140,6 +140,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public PageBean<User> getUserPage(Map<String, Object> paramMap) {
+        //声明一个pageBean对象
+        PageBean<User> pageBean = new PageBean<>((Integer) paramMap.get("pageno"), (Integer) paramMap.get("pagesize"));
+        //拿到起始页数据
+        Integer startIndex = pageBean.getStartIndex();
+        paramMap.put("startIndex", startIndex);
+        List<User> users = userMapper.getUserList(paramMap);
+        pageBean.setDatas(users);
+        Integer totalSize = userMapper.queryUserCount(paramMap);
+        pageBean.setTotalsize(totalSize);
+
+        return pageBean;
+    }
+
+    @Override
     public int deleteUser(List<Integer> ids) {
         return userMapper.deleteBatchIds(ids);
     }

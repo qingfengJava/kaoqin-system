@@ -53,6 +53,8 @@ public class User {
      * 1：管理员
      * 2：学生
      * 3：教师
+     * 4: 辅导员
+     * 5：学校书记
      */
     private String userType;
 

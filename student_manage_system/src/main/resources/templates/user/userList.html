@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>学生列表</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/default/easyui.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/icon.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/easyui/css/demo.css}">
+	<script type="text/javascript" th:src="@{/easyui/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
+
+</head>
+<body>
+<!-- 学生列表 -->
+<table id="dataList" cellspacing="0" cellpadding="0">
+
+</table>
+<!-- 工具栏 -->
+<div id="toolbar">
+	<div style="float: left;">
+		<a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
+	</div>
+	<div style="float: left;" class="datagrid-btn-separator"></div>
+	<div style="float: left;">
+		<a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
+	</div>
+	<div style="float: left;" class="datagrid-btn-separator"></div>
+		<div  style="float: left;">
+			<a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
+		</div>
+	<div style="float: left;margin-top:4px;" class="datagrid-btn-separator" >
+		&nbsp;&nbsp;学号：<input id="search_student_name" class="easyui-textbox" name="search_student_name" style="width:200px;height:30px;" /></div>
+	<div style="margin-left: 10px;margin-top:4px;" >
+		专业：<input id="clazzList" class="easyui-textbox" name="class" />
+		学院：
+		<select id="department" name="department" style="width:200px;height:30px;border-color: #9dc7e7;border-radius: 5px;">
+			<option selected></option>
+			<option>数学与计算机学院</option>
+			<option>生化学院</option>
+			<option>艺术学院</option>
+			<option>医学院</option>
+			<option>法学院</option>
+			<option>土木与建筑工程学院</option>
+			<option>智能制造学院</option>
+			<option>康养学院</option>
+		</select>
+		<a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
+	</div>
+</div>
+
+<!-- 添加用户窗口 -->
+<div id="addDialog" style="padding: 10px">
+	<form id="addForm" method="post" enctype="multipart/form-data">
+		<table cellpadding="8" >
+			<tr>
+				<td>用户名:</td>
+				<td><input id="add_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="username" data-options="required:true, missingMessage:'请填写学号'" /></td>
+			</tr>
+			<tr>
+				<td>密码:</td>
+				<td>
+					<input id="add_password"  class="easyui-textbox" style="width: 200px; height: 30px;" type="password" name="password" data-options="required:true, missingMessage:'请输入登录密码'" />
+				</td>
+			</tr>
+			<tr>
+				<td>姓名:</td>
+				<td>
+					<input id="add_nick_name" class="easyui-textbox" style="width: 200px; height: 30px;" type="text" name="nickName"/>
+				</td>
+			</tr>
+			<tr>
+				<td>用户类型:</td>
+				<td>
+					<select id="userType" name="userType" style="width:200px;height:30px;border-color: #9dc7e7;border-radius: 5px;">
+						<option value=""></option>
+						<option value="1">管理员</option>
+						<option value="2">学生</option>
+						<option value="3">老师</option>
+						<option value="4">辅导员</option>
+						<option value="5">学校书记</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>性别:</td>
+				<td><select id="add_sex" class="easyui-combobox" data-options="editable: false, panelHeight: 50, width: 60, height: 30" name="sex"><option value="男">男</option><option value="女">女</option></select></td>
+			</tr>
+			<tr>
+				<td>联系方式:</td>
+				<td><input id="add_phone" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="mobile" validType="mobile" /></td>
+			</tr>
+			<tr>
+				<td>专业:</td>
+				<td><input id="add_clazzList" style="width: 200px; height: 30px;" class="easyui-textbox" name="classId" /></td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+<!-- 修改用户窗口 -->
+<div id="editDialog" style="padding: 10px">
+	<form id="editForm" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="id" id="edit-id">
+		<table cellpadding="8" >
+			<tr>
+				<td>姓名:</td>
+				<td><input id="edit_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="nickName"/></td>
+			</tr>
+			<tr>
+				<td>性别:</td>
+				<td><select id="edit_sex" class="easyui-combobox" data-options="editable: false, panelHeight: 50, width: 60, height: 30" name="sex"><option value="男">男</option><option value="女">女</option></select></td>
+			</tr>
+			<tr>
+				<td>联系方式:</td>
+				<td><input id="edit_mobile" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="mobile" validType="mobile" /></td>
+			</tr>
+			<tr>
+				<td>专业:</td>
+				<td><input id="edit_clazzList" style="width: 200px; height: 30px;" class="easyui-textbox" name="classId" /></td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+	$(function() {
+
+		//异步加载学生信息
+		$('#dataList').datagrid({
+			title:'用户列表',
+			iconCls:'icon-more',//图标
+			border: true,
+			collapsible:false,//是否可折叠的
+			fit: true,//自动大小
+			method: "post",
+			url: "/user/list",  /* 发送异步请求加载学生信息 */
+			idField:'id',
+			singleSelect:false,//是否单选
+			pagination:true,//分页控件
+			rownumbers:true,//行号
+			sortName:'id',
+			sortOrder:'DESC',
+			remoteSort: false,
+			columns: [
+				[
+					/*列表数据展示*/
+					{field:'chk',checkbox: true,width:50}, /*复选框*/
+					{field:'id',title:'ID',width:50, sortable: true},  /* ID编号 */
+					{field:'username',title:'学号',width:150}, /* 用户学号 */
+					{field:'nickName',title:'姓名',width:150}, /* 用户姓名 */
+					{field:'userType',title:'用户类别',width:150,
+						formatter: function(value){
+							if (value === "1"){
+								return "管理员";
+							}else if(value === "2"){
+								return "学生";
+							}else if(value === "3"){
+								return "老师";
+							}else if(value === "4"){
+								return "辅导员";
+							}else if(value === "5"){
+								return "学校书记";
+							}else {
+								/* 如果没有找到，就是没有 */
+								return 'not found';
+							}
+						}
+					},
+					{field:'sex',title:'性别',width:100},  /*用户性别*/
+					{field:'mobile',title:'联系方式',width:150}, /* 联系方式 */
+					{field:'classId',title:'专业',width:150, /* 所属专业 */
+						formatter: function(value,row,index){
+							if (row.classId){
+								/* 遍历专业信息 */
+								let clazzList = $("#clazzList").combobox("getData");
+								for(let i=0;i<clazzList.length;i++ ){
+									if(row.classId === clazzList[i].id) {
+										/* 只要学生的专业Id和查询的饿专业id相同，这个专业就是学生的专业 */
+										return clazzList[i].name;
+									}
+								}
+								return row.classId;
+							} else {
+								/* 如果没有找到，就是没有 */
+								return 'not found';
+							}
+						}
+					}, {field:'createDate', title:'创建时间', width:150}
+				]
+			],
+			toolbar: "#toolbar",
+			onBeforeLoad : function(){
+				try{
+					$("#clazzList").combobox("getData")
+				}catch(err){
+					preLoadClazz();
+				}
+			}
+		});
+
+		// 设置分页控件
+		let p = $('#dataList').datagrid('getPager');
+		$(p).pagination({
+			pageSize: 10, /* 每页显示的条目数 */
+			pageList: [10,20,30,50,100], /* 分页要显示的大小，用数组存储 */
+			beforePageText: '第',
+			afterPageText: '页    共 {pages} 页',
+			displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
+		});
+
+		// 设置工具类按钮
+		// 添加的工具类按钮
+		$("#add").click(function(){
+			$("#addDialog").dialog("open");  /* 打开添加的窗口 */
+		});
+
+		// 修改按钮
+		$("#edit").click(function(){
+			/* 获取复选框对象 */
+			let selectRows = $("#dataList").datagrid("getSelections");
+			/* 判断是否有选中复选框 */
+			if(selectRows.length !== 1){
+				$.messager.alert("消息提醒", "请选择一条数据进行操作!", "warning");
+			} else{
+				/* 打开修改窗口 */
+				$("#editDialog").dialog("open");
+			}
+		});
+
+		// 删除按钮
+		$("#delete").click(function(){
+			/* 获取复选框对象 */
+			let selectRows = $("#dataList").datagrid("getSelections");
+			if(selectRows.length === 0){
+				$.messager.alert("消息提醒", "请选择数据进行删除!", "warning");
+			} else{
+				let jsonObj = {};
+				$.each(selectRows,function(i,n){
+					jsonObj["ids["+i+"]"] = n.id; /* 拼接json格式的字符串 */
+				});
+				$.messager.confirm("消息提醒", "将删除与学生相关的所有数据，确认继续？", function(r){
+					if(r){
+						$.ajax({
+							type: "post",  /* 发送post请求 */
+							url: "/user/delete",  /* 请求路径 */
+							data:jsonObj, /* 上传的数据 */
+							success: function(data){ /* data封装的是请求成功后控制层返回的数据 */
+								if(data.success){
+									$.messager.alert("消息提醒",data.message,"info");
+									// 刷新表格
+									$("#dataList").datagrid("reload");
+									$("#dataList").datagrid("uncheckAll");
+								} else{
+									$.messager.alert("消息提醒",data.message,"warning");
+								}
+							}
+						});
+					}
+				});
+			}
+		});
+
+		/* 下拉列表框 */
+		function preLoadClazz(){
+			$("#clazzList").combobox({
+				width: "250",
+				height: "30",
+				valueField: "id",
+				textField: "name",
+				multiple: false,
+				editable: false,
+				method: "post",
+				url: "/clazz/getClazzList?from=combox",
+				onChange: function(newValue, oldValue){
+				}
+			});
+		}
+
+		//下拉框通用属性
+		$("#add_clazzList, #edit_clazzList").combobox({
+			width: "200",
+			height: "30",
+			valueField: "id",
+			textField: "name",
+			multiple: false,
+			editable: false,
+			method: "post",
+		});
+
+		/* 添加专业下拉列表框 */
+		$("#add_clazzList").combobox({
+			url: "/clazz/getClazzList?from=combox",
+			onLoadSuccess: function(){
+				//默认选择第一条数据
+				let data = $(this).combobox("getData");
+				/* 赋值 */
+				$(this).combobox("setValue", data[0].id);
+			}
+		});
+
+		$("#edit_clazzList").combobox({
+			url: "/clazz/getClazzList?from=combox",
+			onLoadSuccess: function(){
+				// 默认选择第一条数据
+				let data = $(this).combobox("getData");
+				$(this).combobox("setValue", data[0].id);
+			}
+		});
+
+		// 设置添加学生窗口
+		$("#addDialog").dialog({
+			title: "添加用户",
+			width: 650,
+			height: 460,
+			iconCls: "icon-add",
+			modal: true,
+			collapsible: false,
+			minimizable: false,
+			maximizable: false,
+			draggable: true,
+			closed: true,
+			buttons: [
+				{
+					text:'添加',
+					plain: true,
+					iconCls:'icon-user_add',
+					handler:function(){
+						/* 获取输入的信息并检查是否符合要求 */
+						let validate = $("#addForm").form("validate");
+						if(!validate){
+							$.messager.alert("消息提醒","错误：请检查你输入的数据!","warning");
+						} else{
+							let classId = $("#add_clazzList").combobox("getValue");
+							let formData = new FormData($( "#addForm" )[0]);
+							console.log("12367hsuhdsh:"+formData);
+							$.ajax({
+								type: "post",  /* post请求 */
+								url: "/user/add",  /* 发送请求路径 */
+								data: formData,  /* 传送的数据 */
+								async: false,
+								cache: false,
+								contentType: false,
+								processData: false,
+								success: function(data){
+									if(data.success){
+										$.messager.alert("消息提醒",data.message,"info");
+										// 关闭窗口
+										$("#addDialog").dialog("close");
+
+										// 清空原表格数据
+										$("#add_number").textbox('setValue', "");
+										$("#add_name").textbox('setValue', "");
+										//为添加方便，默认设置为1
+										$("#add_password").textbox('setValue', "1");
+										$("#add_nick_name").textbox('setValue', "");
+										$("#add_sex").textbox('setValue', "男");
+										$("#add_phone").textbox('setValue', "13131313311");
+
+										//重新刷新页面数据
+										$('#dataList').datagrid("reload");
+									} else{
+										$.messager.alert("消息提醒",data.message,"warning");
+									}
+								}
+							});
+						}
+					}
+				},
+				{
+					text:'重置',
+					plain: true,
+					iconCls:'icon-reload',
+					handler:function(){
+						$("#add_number").textbox('setValue', "");
+						$("#add_name").textbox('setValue', "");
+						$("#add_phone").textbox('setValue', "");
+
+						// 重新加载专业
+						$("#add_gradeList").combobox("clear");
+						$("#add_gradeList").combobox("reload");
+					}
+				},
+			]
+		});
+
+		//设置编辑学生窗口
+		$("#editDialog").dialog({
+			title: "修改学生信息",
+			width: 650,
+			height: 460,
+			iconCls: "icon-edit",
+			modal: true,
+			collapsible: false,
+			minimizable: false,
+			maximizable: false,
+			draggable: true,
+			closed: true,
+			buttons: [
+				{
+					text:'提交',
+					plain: true,
+					iconCls:'icon-user_add',
+					handler:function(){
+						let validate = $("#editForm").form("validate");
+						let classId = $("#edit_clazzList").combobox("getValue");
+						if(!validate){
+							$.messager.alert("消息提醒","错误，请检查你输入的数据!","warning");
+						} else {
+							let formData = new FormData($('#editForm')[0]);
+							console.log(formData);
+							$.ajax({
+								type: "post",
+								url: "/user/update",
+								data: formData,
+								async: false,
+								cache: false,
+								contentType: false,
+								processData: false,
+								success: function(data){
+									if(data.success){
+										$.messager.alert("消息提醒",data.message,"info");
+										// 关闭窗口
+										$("#editDialog").dialog("close");
+
+										// 刷新表格
+										$('#dataList').datagrid("options").queryParams = {classId: classId};
+										$("#dataList").datagrid("reload");
+										$("#dataList").datagrid("uncheckAll");
+										setTimeout(function(){
+											$("#clazzList").combobox('setValue', classId);
+										}, 100);
+									} else{
+										$.messager.alert("消息提醒",data.message,"warning");
+									}
+								}
+							});
+						}
+					}
+				},
+				{
+					text:'重置',
+					plain: true,
+					iconCls:'icon-reload',
+					handler:function(){
+						// 清空表单
+						$("#edit_name").textbox('setValue', "");
+						$("#edit_sex").textbox('setValue', "男");
+						$("#edit_phone").textbox('setValue', "");
+
+						$("#edit_gradeList").combobox("clear");
+						$("#edit_gradeList").combobox("reload");
+					}
+				}
+			],
+			onBeforeOpen: function(){
+				let selectRow = $("#dataList").datagrid("getSelected");
+				//设置值
+				$("#edit_name").textbox('setValue', selectRow.nickName);
+				$("#edit_sex").textbox('setValue', selectRow.sex);
+				$("#edit_mobile").textbox('setValue', selectRow.mobile);
+				$("#edit-id").val(selectRow.id);
+				let classId = selectRow.classId;
+				setTimeout(function(){
+					$("#edit_clazzList").combobox('setValue', classId);
+				}, 100);
+			}
+		});
+
+		//搜索按钮监听事件
+		$("#search-btn").click(function(){
+			$('#dataList').datagrid('load',{
+				studentName: $('#search_student_name').val(),
+				classId: $("#clazzList").combobox('getValue') === '' ? 0 : $("#clazzList").combobox('getValue')
+			});
+		});
+	});
+</script>
+
+</body>
+</html>

@@ -21,5 +21,9 @@ public interface UserConstant {
 
     String TEACHER_CODE = "3";
 
+    String FUDAO_TEACHER = "4";
+
+    String SHUJI = "5";
+
     String LOGIN_USER = "loginUser";
 }

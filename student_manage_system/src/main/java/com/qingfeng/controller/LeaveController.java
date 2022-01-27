@@ -1,6 +1,8 @@
 package com.qingfeng.controller;
 
+import com.qingfeng.constants.UserConstant;
 import com.qingfeng.entity.Leave;
+import com.qingfeng.entity.User;
 import com.qingfeng.service.LeaveService;
 import com.qingfeng.utils.PageBean;
 import com.qingfeng.utils.ResultVO;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,14 +44,31 @@ public class LeaveController {
     @ResponseBody
     public Object getClazzList(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                @RequestParam(value = "rows", defaultValue = "100") Integer rows,
-                               @RequestParam(value = "studentid", defaultValue = "0") String studentid,
-                               String from) {
-        Map<String, Object> paramMap = new HashMap<>();
+                               @RequestParam(value = "studentId", defaultValue = "0") String studentId,
+                               @RequestParam(value = "courseId", defaultValue = "0") String courseId,
+                               String from, HttpSession session) {
+        //封装要查询的一些信息
+        Map<String, Object> paramMap = new HashMap<>(10);
         paramMap.put("pageno", page);
         paramMap.put("pagesize", rows);
-        if (!"0".equals(studentid)) {
-            paramMap.put("studentId", studentid);
+        if (!"0".equals(studentId)) {
+            paramMap.put("studentId", studentId);
         }
+        if (!"0".equals(courseId)) {
+            paramMap.put("courseId", courseId);
+        }
+
+        //加载请假列表  学生只加载自己下的请假列表，老师只加载自己学生的请假列表
+        User loginUser = (User) session.getAttribute(UserConstant.LOGIN_USER);
+        if (UserConstant.STUDENT_CODE.equals(loginUser.getUserType())) {
+            // 学生用户，只能查询自己的请假信息
+            paramMap.put("studentId", loginUser.getId());
+        }
+        if (UserConstant.TEACHER_CODE.equals(loginUser.getUserType())) {
+            // 老师只能加载自己学生的请假信息
+            paramMap.put("teacherId", loginUser.getId());
+        }
+
         PageBean<Leave> pageBean = leaveService.queryPage(paramMap);
         if (!StringUtils.isEmpty(from) && "combox".equals(from)) {
             return pageBean.getDatas();

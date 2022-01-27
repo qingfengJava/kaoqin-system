@@ -11,7 +11,88 @@
     <script type="text/javascript" th:src='@{/easyui/js/outlook2.js}'></script>
     <script type="text/javascript" th:inline="javascript">
         var userType = [[${session.loginUser.userType}]];
-        if (userType === "1" || userType === "3") {
+        if (userType === "1") {
+            var _menus = {
+                "menus": [
+                    {
+                        "menuid": "2", "icon": "", "menuname": "用户管理",
+                        "menus": [
+                            {
+                                "menuid": "21",
+                                "menuname": "用户列表",
+                                "icon": "icon-user-teacher",
+                                "url": "/user/user_list"
+                            },
+                            {
+                                "menuid": "22",
+                                "menuname": "学生列表",
+                                "icon": "icon-user-student",
+                                "url": "/user/student_list"
+                            },
+                            {
+                                "menuid": "23",
+                                "menuname": "教师列表",
+                                "icon": "icon-user-teacher",
+                                "url": "/user/teacher_list"
+                            }
+                        ]
+                    },
+                    {
+                        "menuid": "4", "icon": "", "menuname": "学科管理",
+                        "menus": [
+                            {"menuid": "42", "menuname": "专业列表", "icon": "icon-house", "url": "/clazz/clazz_list"}
+                        ]
+                    },
+                    {
+                        "menuid": "6", "icon": "", "menuname": "课程管理",
+                        "menus": [
+                            {
+                                "menuid": "61",
+                                "menuname": "课程列表",
+                                "icon": "icon-book-open",
+                                "url": "/course/course_list"
+                            },
+                        ]
+                    },
+                    {
+                        "menuid": "7", "icon": "", "menuname": "选课管理",
+                        "menus": [
+                            {
+                                "menuid": "71",
+                                "menuname": "选课列表",
+                                "icon": "icon-book-open",
+                                "url": "/selectedCourse/selectedCourse_list"
+                            },
+                        ]
+                    },
+                    {
+                        "menuid": "8", "icon": "", "menuname": "考勤管理",
+                        "menus": [
+                            {
+                                "menuid": "81",
+                                "menuname": "考勤列表",
+                                "icon": "icon-book-open",
+                                "url": "/attendance/attendance_list"
+                            },
+                        ]
+                    },
+                    {
+                        "menuid": "9", "icon": "", "menuname": "请假管理",
+                        "menus": [
+                            {"menuid": "91", "menuname": "请假列表", "icon": "icon-book-open", "url": "/leave/leave_list"},
+                        ]
+                    },
+                    {
+                        "menuid": "5", "icon": "", "menuname": "系统管理",
+                        "menus": [
+                            {"menuid": "51", "menuname": "修改密码", "icon": "icon-set", "url": "/user/personalView"},
+                        ]
+                    }
+                ]
+            };
+        }
+
+        if (userType === "3" || userType === "4" || userType === "5") {
             var _menus = {
                 "menus": [
                     {
@@ -26,7 +107,7 @@
                         ]
                     },
                     {
-                        "menuid": "4", "icon": "", "menuname": "专业管理",
+                        "menuid": "4", "icon": "", "menuname": "学科管理",
                         "menus": [
                             {"menuid": "42", "menuname": "专业列表", "icon": "icon-house", "url": "/clazz/clazz_list"}
                         ]

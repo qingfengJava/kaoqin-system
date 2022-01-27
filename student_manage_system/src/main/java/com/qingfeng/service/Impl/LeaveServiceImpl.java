@@ -24,20 +24,42 @@ public class LeaveServiceImpl implements LeaveService {
         this.leaveMapper = leaveMapper;
     }
 
+    /**
+     * 查询请假信息
+     * @param paramMap
+     * @return
+     */
     @Override
     public PageBean<Leave> queryPage(Map<String, Object> paramMap) {
         PageBean<Leave> pageBean = new PageBean<>((Integer) paramMap.get("pageno"),(Integer) paramMap.get("pagesize"));
 
         Integer startIndex = pageBean.getStartIndex();
         paramMap.put("startIndex",startIndex);
-        List<Leave> datas = leaveMapper.queryList(paramMap);
-        pageBean.setDatas(datas);
 
-        Integer totalsize = leaveMapper.queryCount(paramMap);
-        pageBean.setTotalsize(totalsize);
+        //定义用于封装数据的变量
+        List<Leave> datas = null;
+        Integer totalSize = 0;
+
+        if (paramMap.get("teacherId") != null){
+            //是老师只加载老师下的学生的请假信息
+            datas = leaveMapper.queryListByTeacherId(paramMap);
+            totalSize = leaveMapper.queryCountByTeacherId(paramMap);
+        }else{
+            //不是老师，按照条件查询
+            datas = leaveMapper.queryList(paramMap);
+            totalSize = leaveMapper.queryCount(paramMap);
+        }
+
+        pageBean.setDatas(datas);
+        pageBean.setTotalsize(totalSize);
         return pageBean;
     }
 
+    /**
+     * 添加请假信息
+     * @param leave
+     * @return
+     */
     @Override
     public int addLeave(Leave leave) {
         return leaveMapper.addLeave(leave);

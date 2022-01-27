@@ -40,6 +40,14 @@ public class BaseController {
     /**
      * 跳转学生列表页面
      */
+    @GetMapping("/user_list")
+    public String userList() {
+        return "/user/userList";
+    }
+
+    /**
+     * 跳转学生列表页面
+     */
     @GetMapping("/student_list")
     public String studentList() {
         return "/user/studentList";

@@ -51,6 +51,23 @@ public class Leave {
     private Integer studentId;
 
     /**
+     * 请假课程Id
+     */
+    private Integer leaveCourseId;
+
+    /**
+     * 请假日期
+     */
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd 00:00:00", timezone = "GMT+8")
+    private Date leaveDate;
+
+    /**
+     * 请假时长
+     */
+    private String leaveTime;
+
+    /**
      * 请假理由
      */
     private String info;

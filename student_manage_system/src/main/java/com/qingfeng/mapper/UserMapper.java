@@ -56,4 +56,18 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     Integer queryStuCountByTeacherId(Map<String, Object> paramMap);
+
+    /**
+     * 查询所有用户信息列表
+     * @param paramMap
+     * @return
+     */
+    List<User> getUserList(Map<String, Object> paramMap);
+
+    /**
+     * 查询所有用户总记录数
+     * @param paramMap
+     * @return
+     */
+    Integer queryUserCount(Map<String, Object> paramMap);
 }

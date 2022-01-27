@@ -193,7 +193,7 @@
                     $("#edit_courseDate").attr("value",selectRow.courseDate);
                     $("#edit_max_num").numberbox('setValue', selectRow.maxNum);
                     $("#edit_info").val(selectRow.info);
-                    var teacherId = selectRow.teacherId;
+                    let teacherId = selectRow.teacherId;
                     setTimeout(function () {
                         $("#edit_teacherList").combobox('setValue', teacherId);
                     }, 100);

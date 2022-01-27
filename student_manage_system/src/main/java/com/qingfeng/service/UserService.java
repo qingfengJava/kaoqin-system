@@ -64,4 +64,11 @@ public interface UserService {
      * @return
      */
     boolean checkStudentInCourse(Integer id);
+
+    /**
+     * 查询所有用户信息
+     * @param paramMap
+     * @return
+     */
+    PageBean<User> getUserPage(Map<String, Object> paramMap);
 }

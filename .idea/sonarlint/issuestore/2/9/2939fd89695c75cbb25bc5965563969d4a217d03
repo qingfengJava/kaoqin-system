@@ -1,8 +1,0 @@
-
-J
-java:S18746"/Remove this use of "isEmpty"; it is deprecated.(ãžÔ¶úÿÿÿÿ
-J
-java:S18746"/Remove this use of "isEmpty"; it is deprecated.(ãžÔ¶úÿÿÿÿ
-U
-java:S2441E":Make "User" serializable or don't store it in the session.(Ï¢¿¢ýÿÿÿÿ
-f	java:S117V"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‡Ãí­

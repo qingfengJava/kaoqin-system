@@ -10,6 +10,7 @@
     <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
     <script type="text/javascript" th:src="@{/easyui/js/validateExtends.js}"></script>
     <script type="text/javascript" th:inline="javascript">
+
         $(function() {
             //datagrid初始化
             $('#dataList').datagrid({
@@ -30,11 +31,11 @@
                 columns: [[
                     {field:'chk',checkbox: true,width:50},
                     {field:'id',title:'ID',width:50, sortable: true},
-                    {field:'studentId',title:'学生',width:200,
+                    {field:'studentId',title:'学生',width:100,
                         formatter: function(value,row,index){
                             if (row.studentId){
-                                var studentList = $("#studentList").combobox("getData");
-                                for(var i=0;i<studentList.length;i++ ){
+                                let studentList = $("#studentList").combobox("getData");
+                                for(let i=0;i<studentList.length;i++ ){
                                     //console.log(clazzList[i]);
                                     if(row.studentId == studentList[i].id){
                                         return studentList[i].username;
@@ -46,7 +47,24 @@
                             }
                         }
                     },
-                    {field:'info',title:'请假原因',width:400},
+                    {field:'leaveCourseId',title:'课程',width:200,
+                        formatter: function(value,row,index){
+                            if (row.leaveCourseId){
+                                let courseList = $("#courseList").combobox("getData");
+                                for(let i=0;i<courseList.length;i++ ){
+                                    if(row.leaveCourseId === courseList[i].id) {
+                                        return courseList[i].name;
+                                    }
+                                }
+                                return row.leaveCourseId;
+                            } else {
+                                return 'not found';
+                            }
+                        }
+                    },
+                    {field:'leaveDate',title:'请假日期',width:150},
+                    {field:'leaveTime',title:'请假时长',width:100},
+                    {field:'info',title:'请假原因',width:300},
                     {field:'status',title:'状态',width:80,
                         formatter: function(value,row,index){
                             switch(row.status){
@@ -62,36 +80,35 @@
                             }
                         }
                     },
-                    {field:'remark',title:'批复内容',width:400},
+                    {field:'createDate',title:'申请时间',width:200},
+                    {field:'remark',title:'批复内容',width:100},
                 ]],
                 toolbar: "#toolbar",
                 onBeforeLoad : function(){
-                    try{
-                        $("#studentList").combobox("getData")
-                    }catch(err){
-                        preLoadClazz();
-                    }
+                    preLoadClazz();
+                    $("#studentList").combobox("getData");
+                    $("#courseList").combobox("getData");
                 }
             });
             //提前加载学生信息
             function preLoadClazz(){
                 $("#studentList").combobox({
-                    width: "150",
+                    width: "200",
                     height: "25",
                     valueField: "id",
                     textField: "username",
                     multiple: false, //可多选
                     editable: false, //不可编辑
                     method: "post",
-                    url: "/student/list?from=combox",
+                    url: "/student/list?form=combox",
                     onChange: function(newValue, oldValue){
                         //加载班级下的学生
-                        //$('#dataList').datagrid("options").queryParams = {clazzid: newValue};
-                        //$('#dataList').datagrid("reload");
+                        $('#dataList').datagrid("options").queryParams = {clazzid: newValue};
+                        $('#dataList').datagrid("reload");
                     }
                 });
                 $("#courseList").combobox({
-                    width: "80",
+                    width: "200",
                     height: "25",
                     valueField: "id",
                     textField: "name",
@@ -103,7 +120,7 @@
             }
 
             //设置分页控件
-            var p = $('#dataList').datagrid('getPager');
+            let p = $('#dataList').datagrid('getPager');
             $(p).pagination({
                 pageSize: 10,//每页显示的记录条数，默认为10
                 pageList: [10,20,30,50,100],//可以设置每页记录条数的列表
@@ -119,7 +136,7 @@
 
             //设置编辑按钮
             $("#edit").click(function(){
-                var selectRows = $("#dataList").datagrid("getSelections");
+                let selectRows = $("#dataList").datagrid("getSelections");
                 if(selectRows.length != 1){
                     $.messager.alert("消息提醒", "请选择一条数据进行操作!", "warning");
                 } else{
@@ -133,7 +150,7 @@
 
             //设置审核按钮
             $("#check").click(function(){
-                var selectRows = $("#dataList").datagrid("getSelections");
+                let selectRows = $("#dataList").datagrid("getSelections");
                 if(selectRows.length != 1){
                     $.messager.alert("消息提醒", "请选择一条数据进行操作!", "warning");
                 } else{
@@ -163,15 +180,15 @@
                         plain: true,
                         iconCls:'icon-add',
                         handler:function(){
-                            var validate = $("#editForm").form("validate");
+                            let validate = $("#editForm").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
                                 return;
                             } else{
-                                var studentid = $("#edit_studentList").combobox("getValue");
-                                var id = $("#dataList").datagrid("getSelected").id;
-                                var info = $("#edit_info").textbox("getValue");
-                                var data = {id:id, studentId:studentid, info:info};
+                                let studentId = $("#edit_studentList").combobox("getValue");
+                                let id = $("#dataList").datagrid("getSelected").id;
+                                let info = $("#edit_info").textbox("getValue");
+                                let data = {id:id, studentId:studenId, info:info};
 
                                 $.ajax({
                                     type: "post",
@@ -208,11 +225,11 @@
                     },
                 ],
                 onBeforeOpen: function(){
-                    var selectRow = $("#dataList").datagrid("getSelected");
+                    let selectRow = $("#dataList").datagrid("getSelected");
                     //设置值
                     $("#edit_info").textbox('setValue',selectRow.info);
                     //$("#edit-id").val(selectRow.id);
-                    var studentId = selectRow.studentId;
+                    let studentId = selectRow.studentId;
                     setTimeout(function(){
                         $("#edit_studentList").combobox('setValue', studentId);
                     }, 100);
@@ -242,18 +259,18 @@
                         plain: true,
                         iconCls:'icon-add',
                         handler:function(){
-                            var validate = $("#checkForm").form("validate");
+                            let validate = $("#checkForm").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
                                 return;
                             } else{
 
-                                var studentid = $("#dataList").datagrid("getSelected").studentId;
-                                var id = $("#dataList").datagrid("getSelected").id;
-                                var info = $("#dataList").datagrid("getSelected").info;
-                                var remark = $("#check_remark").textbox("getValue");
-                                var status = $("#check_statusList").combobox("getValue");
-                                var data = {id:id, studentId:studentid, info:info,remark:remark,status:status};
+                                let studentId = $("#dataList").datagrid("getSelected").studentId;
+                                let id = $("#dataList").datagrid("getSelected").id;
+                                let info = $("#dataList").datagrid("getSelected").info;
+                                let remark = $("#check_remark").textbox("getValue");
+                                let status = $("#check_statusList").combobox("getValue");
+                                let data = {id:id, studentId:studentId, info:info,remark:remark,status:status};
 
                                 $.ajax({
                                     type: "post",
@@ -309,7 +326,7 @@
 
             //删除
             $("#delete").click(function(){
-                var selectRow = $("#dataList").datagrid("getSelected");
+                let selectRow = $("#dataList").datagrid("getSelected");
                 if(selectRow == null){
                     $.messager.alert("消息提醒", "请选择数据进行删除!", "warning");
                 } else{
@@ -339,7 +356,7 @@
             $("#addDialog").dialog({
                 title: "添加请假单",
                 width: 600,
-                height: 400,
+                height: 450,
                 iconCls: "icon-add",
                 modal: true,
                 collapsible: false,
@@ -353,7 +370,7 @@
                         plain: true,
                         iconCls:'icon-book-add',
                         handler:function(){
-                            var validate = $("#addForm").form("validate");
+                            let validate = $("#addForm").form("validate");
                             if(!validate){
                                 $.messager.alert("消息提醒","请检查你输入的数据!","warning");
                                 return;
@@ -406,7 +423,7 @@
                 width: "200",
                 height: "30",
                 valueField: "id",
-                textField: "username",
+                textField: "name",
                 multiple: false, //不可多选
                 editable: false, //不可编辑
                 method: "post",
@@ -446,7 +463,7 @@
                     url:u+"?studentId="+sid,
                     onLoadSuccess: function(){
                         // 默认选择第一条数据
-                        var data = $(this).combobox("getData");
+                        let data = $(this).combobox("getData");
                         console.log("getData:", data);
                         console.log(data[0].id);
                         $(this).combobox("setValue", data[0].id);
@@ -456,10 +473,10 @@
 
             // 编辑信息学生选择框
             $("#edit_studentList").combobox({
-                url: "/student/list?from=combox",
+                url: "/student/list?form=combox",
                 onLoadSuccess: function(){
                     // 默认选择第一条数据
-                    var data = $(this).combobox("getData");
+                    let data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                 }
             });
@@ -467,8 +484,8 @@
             //搜索按钮监听事件
             $("#search-btn").click(function(){
                 $('#dataList').datagrid('load',{
-                    studentid: $("#studentList").combobox('getValue') == '' ? 0 : $("#studentList").combobox('getValue'),
-                    courseid: $("#courseList").combobox('getValue') === '' ? 0 : $("#courseList").combobox('getValue')
+                    studentId: $("#studentList").combobox('getValue') == '' ? 0 : $("#studentList").combobox('getValue'),
+                    courseId: $("#courseList").combobox('getValue') === '' ? 0 : $("#courseList").combobox('getValue')
 
                 });
             });
@@ -516,14 +533,32 @@
             <tr>
                 <td style="width:60px">请假课程:</td>
                 <td colspan="3">
-                    <input id="add_courseList" style="width: 300px; height: 30px;" class="easyui-textbox" name="courseId" data-options="required:true, missingMessage:'请选择课程'" />
+                    <input id="add_courseList" style="width: 300px; height: 30px;" class="easyui-textbox" name="leaveCourseId" data-options="required:true, missingMessage:'请选择课程'" />
                 </td>
                 <td style="width:80px"></td>
             </tr>
             <tr>
+                <td style="width:60px">
+                    请假日期：
+                </td>
+                <td>
+                    <input class="easyui-datebox" name="leaveDate" style="width:200px;height:30px;border-color: #9dc7e7" />
+                </td>
+            </tr>
+            <tr>
                 <td style="width:60px">请假时长:</td>
-                <td colspan="3">
-                    <input id="add_time" style="width: 300px; height: 30px;" class="easyui-textbox" name="courseId" data-options="required:true, missingMessage:'请输入请假时长'" />
+                <td>
+                    <select id="add_time" name="leaveTime" style="width:200px;height:30px;border-color: #9dc7e7;border-radius: 5px;">
+                        <option selected></option>
+                        <option>一天</option>
+                        <option>两天</option>
+                        <option>三天以内</option>
+                        <option>四天</option>
+                        <option>五天</option>
+                        <option>一周以内</option>
+                        <option>一个月以内</option>
+                        <option>一个月以上</option>
+                    </select>
                 </td>
             </tr>
             <tr>

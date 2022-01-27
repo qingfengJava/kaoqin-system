@@ -10,12 +10,26 @@
         <result column="remark" property="remark"/>
     </resultMap>
 
+    <!-- 查询请假信息   可以查询学生下或者管理员下的请假信息 -->
     <select id="queryList" resultMap="LeaveInfo">
         SELECT *
         from s_leave
         <where>
             <if test="studentId!=null">and student_id = #{studentId}</if>
+            <if test="courseId != null">and leave_course_id = #{courseId}</if>
         </where>
+        limit #{startIndex},#{pagesize}
+    </select>
+
+    <select id="queryListByTeacherId" resultType="com.qingfeng.entity.Leave">
+        select sl.*
+        from s_leave sl
+        INNER JOIN s_selected_course ssc
+        on sl.student_id = ssc.student_id
+        and sl.leave_course_id = ssc.course_id
+        and ssc.teacher_id = 4
+        <if test="studentId!=null">and sl.student_id = #{studentId}</if>
+        <if test="courseId != null">and sl.leave_course_id = #{courseId}</if>
         limit #{startIndex},#{pagesize}
     </select>
 
@@ -23,24 +37,48 @@
         select count(*) from s_leave
         <where>
             <if test="studentId!=null">and student_id = #{studentId}</if>
+            <if test="courseId != null">and leave_course_id = #{courseId}</if>
         </where>
     </select>
 
+    <select id="queryCountByTeacherId" resultType="java.lang.Integer">
+        select count(*)
+        from s_leave sl
+        INNER JOIN s_selected_course ssc
+        on sl.student_id = ssc.student_id
+        and sl.leave_course_id = ssc.course_id
+        and ssc.teacher_id = 4
+        <if test="studentId!=null">and sl.student_id = #{studentId}</if>
+        <if test="courseId != null">and sl.leave_course_id = #{courseId}</if>
+        limit #{startIndex},#{pagesize}
+    </select>
+
+
     <insert id="addLeave" parameterType="com.qingfeng.entity.Leave">
-        insert into s_leave(student_id,info)
-        values(#{studentId},#{info})
+        insert into s_leave(student_id, leave_course_id, leave_date, leave_time, info)
+        values (#{studentId}, #{leaveCourseId}, #{leaveDate}, #{leaveTime}, #{info})
     </insert>
 
-    <delete id="deleteLeave" parameterType="long">
-        delete from s_leave where id = #{id}
+    <delete id="deleteLeave" parameterType="integer">
+        delete
+        from s_leave
+        where id = #{id}
     </delete>
 
     <update id="editLeave" parameterType="com.qingfeng.entity.Leave">
-        update s_leave set student_id = #{studentId},info = #{info} where id = #{id}
+        update s_leave
+        set student_id = #{studentId},
+            info       = #{info}
+        where id = #{id}
     </update>
 
     <update id="checkLeave" parameterType="com.qingfeng.entity.Leave">
-        update s_leave set student_id = #{studentId},info = #{info},status = #{status},remark = #{remark} where id = #{id}
+        update s_leave
+        set student_id = #{studentId},
+            info       = #{info},
+            status     = #{status},
+            remark     = #{remark}
+        where id = #{id}
     </update>
 
 </mapper>

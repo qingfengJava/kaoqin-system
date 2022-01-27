@@ -78,6 +78,19 @@
         limit #{startIndex}, #{pagesize}
     </select>
 
+    <select id="getUserList" resultType="com.qingfeng.entity.User">
+        SELECT *
+        from s_user
+        where is_deleted = 0
+        <if test="username != null">
+            and username = #{username}
+        </if>
+        <if test="classId != null">
+            and class_id = #{classId}
+        </if>
+        limit #{startIndex}, #{pagesize}
+    </select>
+
     <!-- 查询教师下的学生列表 -->
     <select id="getStudentListByTeacherId" resultType="com.qingfeng.entity.User">
         select DISTINCT su.*
@@ -127,6 +140,17 @@
             and id = #{studentId}
         </if>
         limit #{startIndex}, #{pagesize}
+    </select>
+    <select id="queryUserCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        from s_user
+        where is_deleted = 0
+        <if test="username != null">
+            and username like concat("%",#{username},"%")
+        </if>
+        <if test="classId != null">
+            and class_id like concat("%",#{classId},"%")
+        </if>
     </select>
 
 </mapper>

@@ -53,7 +53,7 @@
                                         if(data.success){
                                             $.messager.alert("消息提醒",data.message,"info")
                                             setTimeout(function(){
-                                                top.location.href = "/system/logout";
+                                                top.location.href = "/user/logout";
                                             }, 1000);
                                         } else {
                                             $.messager.alert("消息提醒",data.message,"error")

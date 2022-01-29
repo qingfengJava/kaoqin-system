@@ -33,18 +33,6 @@
 		&nbsp;&nbsp;学号：<input id="search_student_name" class="easyui-textbox" name="search_student_name" style="width:200px;height:30px;" /></div>
 	<div style="margin-left: 10px;margin-top:4px;" >
 		专业：<input id="clazzList" class="easyui-textbox" name="class" />
-		学院：
-		<select id="department" name="department" style="width:200px;height:30px;border-color: #9dc7e7;border-radius: 5px;">
-			<option selected></option>
-			<option>数学与计算机学院</option>
-			<option>生化学院</option>
-			<option>艺术学院</option>
-			<option>医学院</option>
-			<option>法学院</option>
-			<option>土木与建筑工程学院</option>
-			<option>智能制造学院</option>
-			<option>康养学院</option>
-		</select>
 		<a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
 	</div>
 </div>
@@ -455,6 +443,7 @@
 			],
 			onBeforeOpen: function(){
 				let selectRow = $("#dataList").datagrid("getSelected");
+				console.log(selectRow);
 				//设置值
 				$("#edit_name").textbox('setValue', selectRow.nickName);
 				$("#edit_sex").textbox('setValue', selectRow.sex);

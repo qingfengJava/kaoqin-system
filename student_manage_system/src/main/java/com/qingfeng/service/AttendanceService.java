@@ -41,7 +41,23 @@ public interface AttendanceService {
      */
     int reissue(Integer id);
 
+    /**
+     * 查询考勤信息
+     * @return
+     */
     List<Attendance> selectList();
 
-    int deleteList(List<Attendance> attendanceList);
+    /**
+     * 删除考勤信息
+     * @param ids
+     * @return
+     */
+    int deleteList(List<Integer> ids);
+
+    /**
+     * 修改考勤信息
+     * @param attendance
+     * @return
+     */
+    int updateAttendance(Attendance attendance);
 }

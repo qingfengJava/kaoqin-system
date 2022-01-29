@@ -113,13 +113,39 @@ public class LeaveController {
      */
     @PostMapping("/checkLeave")
     @ResponseBody
-    public ResultVO<Boolean> checkLeave(Leave leave) {
-        int count = leaveService.checkLeave(leave);
-        if (count > 0) {
-            return ResultVO.success();
-        } else {
-            return ResultVO.fail();
+    public ResultVO<Boolean> checkLeave(Leave leave,HttpSession session) {
+        //审核规则：老师/辅导员只能审核3天以内的申请，学校书记审核三天以上的申请 因此审核的时候首先对用户角色进行判断，对请假时间进行判断
+        User loginUser = (User) session.getAttribute(UserConstant.LOGIN_USER);
+
+        //先对请假时间进行判断
+        if ("一天".equals(leave.getLeaveTime()) || "两天".equals(leave.getLeaveTime()) || "三天以内".equals(leave.getLeaveTime())){
+            //三天以内的时间 判断用户是否正确
+            if (UserConstant.TEACHER_CODE.equals(loginUser.getUserType()) || UserConstant.FUDAO_TEACHER.equals(loginUser.getUserType())) {
+                //说明是老师和辅导员
+                int count = leaveService.checkLeave(leave);
+                if (count > 0) {
+                    return ResultVO.success();
+                } else {
+                    return ResultVO.fail();
+                }
+            }else{
+                return ResultVO.fail("请假时间小于三天，无权审批！");
+            }
+        }else {
+            //三天以上的时间
+            if (UserConstant.SHUJI.equals(loginUser.getUserType())){
+                //说明是老师和辅导员
+                int count = leaveService.checkLeave(leave);
+                if (count > 0) {
+                    return ResultVO.success();
+                } else {
+                    return ResultVO.fail();
+                }
+            }else{
+                return ResultVO.fail("请假时间大于三天，无权审批！");
+            }
         }
+
     }
 
 

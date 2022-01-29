@@ -37,6 +37,7 @@
         INNER JOIN s_selected_course ssc on sa.student_id = ssc.student_id
                                                 and sa.course_id = ssc.course_id
                                                 and ssc.teacher_id = #{teacherId}
+                                                and sa.is_deleted = 0
         <if test="courseId != null">
             and sa.course_id = #{courseId}
         </if>
@@ -76,6 +77,7 @@
         INNER JOIN s_selected_course ssc on sa.student_id = ssc.student_id
         and sa.course_id = ssc.course_id
         and ssc.teacher_id = #{teacherId}
+        and sa.is_deleted = 0
         <if test="courseId != null">
             and sa.course_id = #{courseId}
         </if>
@@ -92,5 +94,9 @@
 
     <update id="reissue">
         update s_attendance set type = '补签' where id = #{attendanceId}
+    </update>
+
+    <update id="updateAttendanceById">
+        update  s_attendance set course_id=#{courseId},student_id=#{studentId},type=#{type},course_date=#{courseDate},course_weak=#{courseWeak} where id = #{id}
     </update>
 </mapper>

@@ -40,5 +40,12 @@ public interface CourseService {
      */
     int deleteCourse(List<Integer> ids);
 
+    /**
+     * 查询课程Id
+     * @param ids
+     * @return
+     */
+    List<Course> getCourseById(List<Integer> ids, int teacherId);
+
     List<Course> getCourseById(List<Integer> ids);
 }

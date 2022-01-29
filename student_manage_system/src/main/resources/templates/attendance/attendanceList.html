@@ -21,7 +21,7 @@
                 method: "post",
                 url: "/attendance/getAttendanceList",
                 idField:'id',
-                singleSelect: true,
+                singleSelect: false,
                 pagination: true,
                 rownumbers: true,
                 sortName:'id',
@@ -31,13 +31,28 @@
                 [
                     {field:'chk',checkbox: true,width:50},
                     {field:'id',title:'ID',width:50, sortable: true},
-                    {field:'studentId',title:'学生',width:200,
+                    {field:'studentId',title:'学号',width:100,
                         formatter: function(value,row,index){
                             if (row.studentId){
                                 let studentList = $("#studentList").combobox("getData");
                                 for(let i=0;i<studentList.length;i++ ){
                                     if(row.studentId === studentList[i].id) {
                                         return studentList[i].username;
+                                    }
+                                }
+                                return row.studentId;
+                            } else {
+                                return 'not found';
+                            }
+                        }
+                    },
+                    {field:'nickName',title:'学生',width:100,
+                        formatter: function(value,row,index){
+                            if (row.studentId){
+                                let studentList = $("#studentList").combobox("getData");
+                                for(let i=0;i<studentList.length;i++ ){
+                                    if(row.studentId === studentList[i].id) {
+                                        return studentList[i].nickName;
                                     }
                                 }
                                 return row.studentId;
@@ -201,7 +216,7 @@
             });
 
             // 下拉框通用属性
-            $("#add_courseList,#courseList,#add_typeList").combobox({
+            $("#add_courseList,#courseList,#edit_courseList,#add_typeList").combobox({
                 width: "200",
                 height: "30",
                 valueField: "id",
@@ -211,7 +226,7 @@
                 method: "post",
             });
 
-            $("#add_studentList,#studentList").combobox({
+            $("#add_studentList,#edit_studentList,#studentList").combobox({
                 width: "200",
                 height: "30",
                 valueField: "id",
@@ -235,8 +250,18 @@
                 }
             });
 
-            // 添加课程选择框
-            $("#add_courseList").combobox({
+            $("#edit_studentList").combobox({
+                url: "/student/list?form=combox",
+                onLoadSuccess: function(){
+                    // 默认选择第一条数据
+                    let data = $(this).combobox("getData");
+                    $(this).combobox("setValue", data[0].id);
+                }
+
+            });
+
+            // 修改课程选择框
+            $("#edit_courseList").combobox({
                 url: "/course/getCourseList?from=combox",
                 onLoadSuccess: function(){
                     // 默认选择第一条数据
@@ -251,6 +276,7 @@
             function getStudentSelectedCourseList(sid){
                 // 添加课程选择框
                 console.log("sid:", sid);
+                //考勤表下面的方法
                 let u = "getStudentSelectedCourseList";
                 $("#add_courseList").combobox({
                     url:u+"?studentId="+sid,
@@ -262,6 +288,150 @@
                     }
                 });
             }
+
+            //删除
+            $("#delete").click(function(){
+                let selectRow = $("#dataList").datagrid("getSelected");
+                if(selectRow == null){
+                    $.messager.alert("消息提醒", "请选择数据进行删除!", "warning");
+                } else{
+                    //封装json格式的数据
+                    let jsonObj = {};
+                    $.each(selectRow,function(i,n){
+                        jsonObj["ids["+i+"]"] = n.id;
+                    });
+                    $.messager.confirm("消息提醒", "确认删除吗，确认继续？", function(r){
+                        if(r){
+                            $.ajax({
+                                type: "post",
+                                url: "/attendance/deleteAttendance",
+                                data: jsonObj,
+                                success: function(data){
+                                    if(data.success){
+                                        $.messager.alert("消息提醒",data.message,"info");
+                                        //刷新表格
+                                        $("#dataList").datagrid("reload");
+                                    } else{
+                                        $.messager.alert("消息提醒",data.message,"warning");
+                                        return;
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            $("#update").click(function () {
+                let table = $("#updteTable");
+                let selectRows = $("#dataList").datagrid("getSelections");
+                if (selectRows.length !== 1) {
+                    $.messager.alert("消息提醒", "请选择一条数据进行操作!", "warning");
+                } else {
+                    $("#editDialog").dialog("open");
+                }
+            });
+
+            // 编辑考勤信息
+            $("#editDialog").dialog({
+                title: "修改考勤信息",
+                width: 450,
+                height: 400,
+                iconCls: "icon-edit",
+                modal: true,
+                collapsible: false,
+                minimizable: false,
+                maximizable: false,
+                draggable: true,
+                closed: true,
+                buttons: [
+                    {
+                        text: '提交',
+                        plain: true,
+                        iconCls: 'icon-user_add',
+                        handler: function () {
+                            let validate = $("#editForm").form("validate");
+                            if (!validate) {
+                                $.messager.alert("消息提醒", "请检查你输入的数据!", "warning");
+                            } else {
+                                let studentId = $("#edit_studentList").combobox("getValue");
+                                let id = $("#dataList").datagrid("getSelected").id;
+                                let courseId = $("#edit_courseList").combobox("getValue");
+                                let courseWeak = $("#edit_weakday option:selected").text()
+                                let courseDate = $("#edit_courseDate").datebox("getValue");
+                                let type = $("#edit_type option:selected").text();
+                                let data = {
+                                    id: id,
+                                    studentId: studentId,
+                                    courseId: courseId,
+                                    courseWeak: courseWeak,
+                                    courseDate: courseDate,
+                                    type: type
+                                };
+
+                                $.ajax({
+                                    type: "post",
+                                    url: "/attendance/updateAttendance",
+                                    data: data,
+                                    success: function (data) {
+                                        if (data.success) {
+                                            $.messager.alert("消息提醒", data.message, "info");
+
+                                            //关闭窗口
+                                            $("#editDialog").dialog("close");
+
+                                            //清空原表格数据
+                                            $("#edit_studentList").combobox('setValue', "");
+                                            $("#edit_courseList").combobox('setValue', "");
+                                            $("#edit_courseDate").datebox('setValue', "");
+                                            $("#edit_type").attr('value', "");
+                                            $("#edit_weakday").attr('value',"");
+
+                                            //重新刷新页面数据
+                                            $('#dataList').datagrid("reload");
+                                            $('#dataList').datagrid("uncheckAll");
+                                        } else {
+                                            $.messager.alert("消息提醒", data.message, "warning");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    },
+                    {
+                        text: '重置',
+                        plain: true,
+                        iconCls: 'icon-reload',
+                        handler: function () {
+                            $("#edit_name").textbox('setValue', "");
+                            $("#edit_phone").textbox('setValue', "");
+                        }
+                    },
+                ],
+                onBeforeOpen: function () {
+                    let selectRow = $("#dataList").datagrid("getSelected");
+                    // 设置值
+                    $("#edit_courseDate").datebox('setValue',selectRow.courseDate);
+                    $("#edit_type").attr('value', selectRow.type);
+                    $("#edit_weakday").attr('value',selectRow.courseWeak);
+                    $("#edit-id").val(selectRow.id);
+
+                    setTimeout(function(){
+                        $("#edit_studentList").combobox('setValue', selectRow.studentId);
+                    }, 100);
+                    setTimeout(function(){
+                        $("#edit_courseList").combobox('setValue', selectRow.courseId);
+                    }, 100);
+
+                },
+                onClose: function () {
+                    $("#edit_studentList").combobox('setValue', "");
+                    $("#edit_courseList").combobox('setValue', "");
+                    $("#edit_courseDate").datebox('setValue', "");
+                    $("#edit_type").attr('value', "");
+                    $("#edit_weakday").attr('value',"");
+                }
+            });
 
             //搜索按钮监听事件
             $("#search-btn").click(function(){
@@ -283,12 +453,20 @@
 <div id="toolbar">
     <div style="float: left;"><a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">签到</a></div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
-    <div th:if="${session.loginUser.userType == '1' || session.loginUser.userType == '3'}" style="float: left; margin-right: 10px;">
+    <div th:if="${session.loginUser.userType == '3'}" style="float: left; margin-right: 10px;">
         <a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">补签</a>
     </div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
+    <div th:if="${session.loginUser.userType == '3'}" style="float: left;">
+        <a id="update" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
+    </div>
+    <div style="float: left;" class="datagrid-btn-separator"></div>
+    <div th:if="${session.loginUser.userType == '3'}" style="float: left; margin-right: 10px;">
+        <a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
+    </div>
+    <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="margin-top: 3px;">
-        学生：<input id="studentList" class="easyui-textbox" name="studentId" />
+        学生：<input id="studentList" class="easyui-textbox" name="studentId" style="width: 100px; height: 30px" />
         课程：<input id="courseList" class="easyui-textbox" name="courseId" />
         类型：<input id="typeList" class="easyui-textbox" name="type" style="width:200px;height:30px"/>
         时间：<input id="date" class="easyui-datebox" name="courseDate" style="width:200px;height:30px" />
@@ -327,6 +505,63 @@
                 <td>上课星期：</td>
                 <td>
                     <select id="add_weakday" name="courseWeak" style="width:200px;height:30px;border-color: #9dc7e7;border-radius: 5px;">
+                        <option selected></option>
+                        <option>星期一</option>
+                        <option>星期二</option>
+                        <option>星期三</option>
+                        <option>星期四</option>
+                        <option>星期五</option>
+                        <option>星期六</option>
+                        <option>星期天</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<!-- 修改数据窗口 -->
+<div id="editDialog" style="padding: 10px">
+    <form id="editForm" method="post">
+        <table cellpadding="8" >
+            <tr>
+                <td style="width:40px">学生:</td>
+                <td colspan="3">
+                    <input id="edit_studentList" style="width: 200px; height: 30px;" class="easyui-textbox" name="studentId" data-options="required:true, missingMessage:'请选择学生'" />
+                </td>
+                <td style="width:80px"></td>
+            </tr>
+            <tr>
+                <td style="width:40px">课程:</td>
+                <td colspan="3">
+                    <input id="edit_courseList" style="width: 200px; height: 30px;" class="easyui-textbox" name="courseId" data-options="required:true, missingMessage:'请选择课程'" />
+                </td>
+                <td style="width:80px"></td>
+            </tr>
+            <tr>
+                <td style="width:80px">
+                    上课日期：
+                </td>
+                <td>
+                    <input id="edit_courseDate" class="easyui-datebox" name="courseDate" style="width:200px;height:30px;border-color: #9dc7e7" />
+                </td>
+            </tr>
+            <tr>
+                <td>签到类型：</td>
+                <td>
+                    <select id="edit_type" name="type" style="width:200px;height:30px;border-color: #9dc7e7;border-radius: 5px;">
+                        <option selected></option>
+                        <option>正常</option>
+                        <option>迟到</option>
+                        <option>补签</option>
+                        <option>未签到</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>上课星期：</td>
+                <td>
+                    <select id="edit_weakday" name="courseWeak" style="width:200px;height:30px;border-color: #9dc7e7;border-radius: 5px;">
                         <option selected></option>
                         <option>星期一</option>
                         <option>星期二</option>

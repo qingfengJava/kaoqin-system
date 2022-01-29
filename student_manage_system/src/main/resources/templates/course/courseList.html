@@ -31,15 +31,14 @@
                         {field: 'chk', checkbox: true, width: 50},
                         {field: 'id', title: 'ID', width: 50, sortable: true},
                         {field: 'name', title: '课程名称', width: 200},
-                        {
-                            field: 'teacherId', title: '授课老师', width: 200,
+                        {field: 'teacherId', title: '授课老师', width: 200,
                             formatter: function (value, row, index) {
                                 console.log(row);
                                 if (row.teacherId) {
                                     let teacherList = $("#teacherList").combobox("getData");
                                     for (let i = 0; i < teacherList.length; i++) {
                                         if (row.teacherId === teacherList[i].id) {
-                                            return teacherList[i].username;
+                                            return teacherList[i].nickName;
                                         }
                                     }
                                     return row.teacherId;
@@ -316,7 +315,7 @@
                 url: "/teacher/list?from=combox",
                 onLoadSuccess: function () {
                     // 默认选择第一条数据
-                    var data = $(this).combobox("getData");
+                    let data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                 }
             });

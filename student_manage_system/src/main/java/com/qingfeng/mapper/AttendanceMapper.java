@@ -48,4 +48,11 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
      * @return
      */
     int queryCountByTeacherId(Map<String, Object> paramMap);
+
+    /**
+     * 修改考勤信息
+     * @param attendance
+     * @return
+     */
+    int updateAttendanceById(Attendance attendance);
 }

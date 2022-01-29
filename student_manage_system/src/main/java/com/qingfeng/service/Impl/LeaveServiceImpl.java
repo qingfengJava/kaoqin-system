@@ -75,6 +75,11 @@ public class LeaveServiceImpl implements LeaveService {
         return leaveMapper.checkLeave(leave);
     }
 
+    /**
+     * 删除请假信息
+     * @param id
+     * @return
+     */
     @Override
     public int deleteLeave(Integer id) {
         return leaveMapper.deleteLeave(id);

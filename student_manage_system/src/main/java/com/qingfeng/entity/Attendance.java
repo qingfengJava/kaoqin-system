@@ -33,7 +33,7 @@ public class Attendance {
     private Integer studentId;
 
     /**
-     * 签到类型：正常/迟到/补签
+     * 签到类型：正常/迟到/补签/未签到
      */
     private String type = "正常";
 

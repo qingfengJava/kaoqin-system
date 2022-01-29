@@ -9,6 +9,7 @@ import com.qingfeng.service.AttendanceService;
 import com.qingfeng.service.CourseService;
 import com.qingfeng.service.SelectedCourseService;
 import com.qingfeng.utils.DateFormatUtil;
+import com.qingfeng.utils.IdsData;
 import com.qingfeng.utils.PageBean;
 import com.qingfeng.utils.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +104,7 @@ public class AttendanceController {
      */
     @RequestMapping("/getStudentSelectedCourseList")
     @ResponseBody
-    public Object getStudentSelectedCourseList(@RequestParam(value = "studentId", defaultValue = "0") String studentId) {
+    public Object getStudentSelectedCourseList(@RequestParam(value = "studentId", defaultValue = "0") String studentId,HttpSession session) {
         // 通过学生id查询选课信息
         List<SelectedCourse> selectedCourseList = selectedCourseService.getAllBySid(Integer.valueOf(studentId));
         // 通过选课中的课程id查询学生所选择的课程
@@ -111,11 +112,18 @@ public class AttendanceController {
         for (SelectedCourse selectedCourse : selectedCourseList) {
             ids.add(selectedCourse.getCourseId());
         }
+        //要查询对应老师下的课程
+        User loginUser = (User) session.getAttribute(UserConstant.LOGIN_USER);
+        int teacherId = 0;
+        if(UserConstant.TEACHER_CODE.equals(loginUser.getUserType())){
+            teacherId = loginUser.getId();
+        }
         // 学生选课列表
-        List<Course> courseById = courseService.getCourseById(ids);
+        List<Course> courseById = courseService.getCourseById(ids,teacherId);
         if (CollectionUtils.isEmpty(courseById)) {
             return ResultVO.fail("该学生未进行选课");
         }
+        System.out.println(courseById);
         return courseById;
     }
 
@@ -170,6 +178,12 @@ public class AttendanceController {
                     } else{
                         return ResultVO.fail("只能签到当天的课程！");
                     }
+                }else if (UserConstant.TEACHER_CODE.equals(loginUser.getUserType())) {
+                    //老师可以直接进行签到
+                    int count = attendanceService.addAttendance(attendance);
+                    if (count > 0) {
+                        return ResultVO.success();
+                    }
                 }
             }
             return ResultVO.fail();
@@ -186,7 +200,40 @@ public class AttendanceController {
         if (count > 0) {
             return ResultVO.success();
         } else {
-            return ResultVO.fail();
+            return ResultVO.fail("服务器异常，补签失败！！！");
+        }
+    }
+
+    /**
+     * 删除考勤信息
+     * @param data
+     * @return
+     */
+    @PostMapping("/deleteAttendance")
+    @ResponseBody
+    public ResultVO<Boolean> deleteAttendance(IdsData data){
+        //根据Id删除考勤信息
+        int count = attendanceService.deleteList(data.getIds());
+        if (count > 0) {
+            return ResultVO.success();
+        } else {
+            return ResultVO.fail("服务器异常，删除考勤信息失败");
+        }
+    }
+
+    /**
+     * 修改考勤信息
+     * @param attendance
+     * @return
+     */
+    @PostMapping("/updateAttendance")
+    @ResponseBody
+    public ResultVO<Boolean> updateAttendance(Attendance attendance){
+        int count = attendanceService.updateAttendance(attendance);
+        if (count > 0) {
+            return ResultVO.success();
+        } else {
+            return ResultVO.fail("服务器异常，修改考勤信息失败");
         }
     }
 }

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author 清风学Java
@@ -108,14 +107,32 @@ public class AttendanceServiceImpl implements AttendanceService {
         return attendanceMapper.reissue(id);
     }
 
+    /**
+     * 查询考勤信息
+     * @return
+     */
     @Override
     public List<Attendance> selectList() {
         return attendanceMapper.selectList(null);
     }
 
+    /**
+     * 删除考勤信息
+     * @param ids
+     * @return
+     */
     @Override
-    public int deleteList(List<Attendance> attendanceList) {
-        List<Integer> collect = attendanceList.stream().map(Attendance::getId).collect(Collectors.toList());
-        return attendanceMapper.deleteBatchIds(collect);
+    public int deleteList(List<Integer> ids) {
+        return attendanceMapper.deleteBatchIds(ids);
+    }
+
+    /**
+     * 修改考勤信息
+     * @param attendance
+     * @return
+     */
+    @Override
+    public int updateAttendance(Attendance attendance) {
+        return attendanceMapper.updateAttendanceById(attendance);
     }
 }

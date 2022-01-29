@@ -1,0 +1,12 @@
+
+]
+java:S1126†"AReplace this if-then-else statement by a single return statement.(”ÞãÆþÿÿÿÿ
+f
+java:S1192R"KDefine a constant instead of duplicating this literal "startIndex" 3 times.(—ÿ¡åþÿÿÿÿ
+\
+java:S1192O"GDefine a constant instead of duplicating this literal "pageno" 3 times.(üñ©?
+^
+java:S1192O"IDefine a constant instead of duplicating this literal "pagesize" 3 times.(üñ©?
+`
+java:S11557">Use isEmpty() to check whether the collection is empty or not.(ö¢¡ÿÿÿÿÿÿ8®€¹×é/
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(Ë°‡Æ

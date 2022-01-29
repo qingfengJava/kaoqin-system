@@ -1,5 +1,0 @@
-
-Z	java:S106K"9Replace this use of System.out or System.err by a logger.(›³éõûÿÿÿÿ8î˜¥Üç/
-U	java:S106L"9Replace this use of System.out or System.err by a logger.(Ô½úÍ8ñ˜¥Üç/
-Q
-java:S1874M"/Remove this use of "isEmpty"; it is deprecated.(Í¦´ôúÿÿÿÿ8ò˜¥Üç/

@@ -38,7 +38,7 @@
                                 for(let i=0;i<studentList.length;i++ ){
                                     //console.log(clazzList[i]);
                                     if(row.studentId == studentList[i].id){
-                                        return studentList[i].username;
+                                        return studentList[i].nickName;
                                     }
                                 }
                                 return row.studentId;
@@ -267,10 +267,11 @@
 
                                 let studentId = $("#dataList").datagrid("getSelected").studentId;
                                 let id = $("#dataList").datagrid("getSelected").id;
+                                let leaveTime = $("#dataList").datagrid("getSelected").leaveTime;
                                 let info = $("#dataList").datagrid("getSelected").info;
                                 let remark = $("#check_remark").textbox("getValue");
                                 let status = $("#check_statusList").combobox("getValue");
-                                let data = {id:id, studentId:studentId, info:info,remark:remark,status:status};
+                                let data = {id:id, studentId:studentId,leaveTime:leaveTime,info:info,remark:remark,status:status};
 
                                 $.ajax({
                                     type: "post",
@@ -308,15 +309,14 @@
                     },
                 ],
                 onBeforeOpen: function(){
-                    /*
-                    var selectRow = $("#dataList").datagrid("getSelected");
+                    let selectRow = $("#dataList").datagrid("getSelected");
                     //设置值
                     $("#edit_info").textbox('setValue',selectRow.info);
                     //$("#edit-id").val(selectRow.id);
-                    var studentId = selectRow.studentId;
+                    let studentId = selectRow.studentId;
                     setTimeout(function(){
                         $("#edit_studentList").combobox('setValue', studentId);
-                    }, 100);*/
+                    }, 100);
                 },
                 onClose: function(){
                     $("#edit_info").val("");
@@ -509,7 +509,7 @@
     <div th:if="${session.loginUser.userType == '2'}" style="float: left;"><a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a></div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
     <div th:if="${session.loginUser.userType == '2'}" style="float: left;"><a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a></div>
-    <div th:if="${session.loginUser.userType == '1' || session.loginUser.userType == '3'}" style="float: left;"><a id="check" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">审核</a></div>
+    <div th:if="${session.loginUser.userType == '3' || session.loginUser.userType == '4' || session.loginUser.userType == '5'}" style="float: left;"><a id="check" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">审核</a></div>
     <div style="float: left; margin-right: 10px;"><a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a></div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="margin-top: 3px;">
@@ -596,7 +596,7 @@
     <form id="checkForm" method="post">
         <table cellpadding="8" >
             <tr>
-                <td style="width:60px">学生:</td>
+                <td style="width:60px">审核状态:</td>
                 <td colspan="3">
                     <select id="check_statusList" style="width: 300px; height: 30px;" class="easyui-combobox" name="status" data-options="required:true, missingMessage:'请选择状态'" >
                         <option value="1">审核通过</option>

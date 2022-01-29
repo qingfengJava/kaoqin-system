@@ -15,11 +15,11 @@
     <select id="queryList" resultMap="CourseInfo">
         SELECT *
         from s_course
-        where 1=1
-        <if test="name!=null"> and name LIKE concat("%",#{name},"%")</if>
-        <if test="teacherId!=null"> and teacher_id = #{teacherId}</if>
-        <if test="weakday!=null"> and weakday LIKE concat("%",#{weakday},"%")</if>
-
+        <where>
+            <if test="name!=null"> and name LIKE concat("%",#{name},"%")</if>
+            <if test="teacherId!=null"> and teacher_id LIKE concat("%",#{teacherId},"%")</if>
+            <if test="weakday!=null"> and weakday LIKE concat("%",#{weakday},"%")</if>
+        </where>
         limit #{startIndex},#{pagesize}
     </select>
 
@@ -62,10 +62,22 @@
         select *
         from s_course
         where id in
-        <foreach collection="list" open="(" close=")" separator="," item="id">
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
             #{id}
         </foreach>
     </select>
+
+    <select id="getCourseByTeacherId" resultType="com.qingfeng.entity.Course">
+        select *
+        from s_course
+        where
+              id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+        <if test="teacherId != 0">and teacher_id = #{teacherId}</if>
+    </select>
+
     <select id="queryCourse" resultType="com.qingfeng.entity.Course">
         select count(*) from s_course
         <where>
@@ -83,8 +95,6 @@
         <if test="weakday!=null">and sc.weakday LIKE concat("%",#{weakday},"%")</if>
         limit #{startIndex},#{pagesize}
     </select>
-    <select id="queryListByTeacherId"
-            resultType="com.qingfeng.entity.Course"></select>
 
     <delete id="deleteByCourseId">
         delete from s_selected_course where course_id = #{id}

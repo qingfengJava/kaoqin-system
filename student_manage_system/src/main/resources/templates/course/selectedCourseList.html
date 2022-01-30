@@ -76,8 +76,8 @@
             //提前加载学生和课程信息
             function preLoadClazz(){
                 $("#studentList").combobox({
-                    width: "150",
-                    height: "25",
+                    width: "200",
+                    height: "30",
                     valueField: "id",
                     textField: "username",
                     multiple: false,
@@ -88,8 +88,8 @@
                 });
 
                 $("#courseList").combobox({
-                    width: "150",
-                    height: "25",
+                    width: "200",
+                    height: "30",
                     valueField: "id",
                     textField: "name",
                     multiple: false, //可多选
@@ -141,7 +141,7 @@
                                 url: "/selectedCourse/deleteSelectedCourse",
                                 data: {id: id},
                                 success: function(msg){
-                                    if(msg === "操作成功"){
+                                    if(msg === "退课成功"){
                                         $.messager.alert("消息提醒","删除成功!","info");
                                         //刷新界面
                                         $('#dataList').datagrid("reload");
@@ -263,6 +263,11 @@
                     courseId: $("#courseList").combobox('getValue') == '' ? 0 : $("#courseList").combobox('getValue')
                 });
             });
+
+            $("#clear-btn").click(function () {
+                $("#studentList").combobox('setValue',"");
+                $("#courseList").combobox('setValue',"");
+            })
         });
     </script>
 </head>
@@ -276,11 +281,11 @@
     <div style="float: left;"><a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a></div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="float: left; margin-right: 10px;"><a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">退选</a></div>
-    <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="margin-top: 3px;">
         学生：<input id="studentList" class="easyui-textbox" name="studentList" />
         课程：<input id="courseList" class="easyui-textbox" name="courseList" />
         <a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
+        <a id="clear-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">清空搜索</a>
     </div>
 </div>
 

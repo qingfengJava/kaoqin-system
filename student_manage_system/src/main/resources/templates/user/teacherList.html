@@ -124,8 +124,8 @@
 
 			function preLoadClazz(){
 				$("#clazzList").combobox({
-					width: "150",
-					height: "25",
+					width: "200",
+					height: "30",
 					valueField: "id",
 					textField: "name",
 					multiple: false, //可多选
@@ -345,6 +345,11 @@
 					classId: $("#clazzList").combobox('getValue') === '' ? 0 : $("#clazzList").combobox('getValue')
 				});
 			});
+
+			$("#clear-btn").click(function () {
+				$("#search_student_name").val("");
+				$("#clazzList").combobox('setValue',"");
+			})
 		});
 	</script>
 </head>
@@ -367,11 +372,12 @@
 		<a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
 	</div>
 	<div style="float: left;margin-top:4px;" class="datagrid-btn-separator" >
-		&nbsp;&nbsp;姓名：<input id="search_student_name" class="easyui-textbox" name="search_student_name" />
+		&nbsp;&nbsp;姓名：<input id="search_student_name" class="easyui-textbox" name="search_student_name" style="width: 200px; height: 30px;"/>
 	</div>
 	<div style="margin-left: 10px;margin-top:4px;" >
 		专业：<input id="clazzList" class="easyui-textbox" name="class" />
 		<a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
+		<a id="clear-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">清空搜索</a>
 	</div>
 </div>
 
@@ -389,15 +395,15 @@
 			</tr>
 			<tr>
 				<td>用户名:</td>
-				<td colspan="4"><input id="add_name" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="username" data-options="required:true, missingMessage:'请填写用户名'" /></td>
+				<td colspan="4"><input id="add_name" style="width: 200px; height: 30px;border-radius: 5px;" class="easyui-textbox" type="text" name="username" data-options="required:true, missingMessage:'请填写用户名'" /></td>
 			</tr>
 			<tr>
 				<td>密码:</td>
-				<td colspan="4"><input id="add_password" style="width: 200px; height: 30px;" class="easyui-textbox" type="password" name="password" data-options="required:true, missingMessage:'请填写密码'" /></td>
+				<td colspan="4"><input id="add_password" style="width: 200px; height: 30px;border-radius: 5px;" class="easyui-textbox" type="password" name="password" data-options="required:true, missingMessage:'请填写密码'" /></td>
 			</tr>
 			<tr>
 				<td>姓名:</td>
-				<td colspan="4"><input id="add_nickName" style="width: 200px; height: 30px;" class="easyui-textbox" type="text" name="nickName" data-options="required:true, missingMessage:'请填写姓名'" /></td>
+				<td colspan="4"><input id="add_nickName" style="width: 200px; height: 30px;border-radius: 5px;" class="easyui-textbox" type="text" name="nickName" data-options="required:true, missingMessage:'请填写姓名'" /></td>
 			</tr>
 			<tr>
 				<td>性别:</td>

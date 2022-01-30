@@ -137,11 +137,17 @@ public class ClazzController {
         //获取专业Id的集合
         List<Integer> ids = data.getIds();
         // 判断是否存在课程关联学生
+        boolean flag = false;
         for (Integer id : ids) {
             //根据Id查询是否有学生选择这个专业
             if (!userService.checkStudentInCourse(id)) {
-                return ResultVO.fail("无法删除，专业下存在老师或者学生");
+                flag = true;
+                break;
             }
+        }
+
+        if (flag){
+            return ResultVO.fail("无法删除，专业下存在老师或者学生");
         }
 
         //根据Id进行删除，返回的是影响的行数

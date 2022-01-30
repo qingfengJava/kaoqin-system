@@ -33,7 +33,7 @@
                     {field:'chk',checkbox: true,width:50}, //复选框
                     {field:'id',title:'ID',width:250, sortable: true}, /* id号 */
                     {field:'name',title:'专业名称',width:200},
-                    {field:'info',title:'专业介绍',width:100,
+                    {field:'info',title:'专业介绍',width:200,
                     },
                 ]
                 ],
@@ -245,11 +245,13 @@
 <div id="toolbar">
     <div th:if="${session.loginUser.userType == '1'}" style="float: left;">
         <a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
-        </div>
+    </div>
+    <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="float: left; margin-right: 10px;">
         <a id="edit-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
     </div>
-    <div style="float: left; margin-right: 10px;">
+    <div style="float: left;" class="datagrid-btn-separator"></div>
+    <div th:if="${session.loginUser.userType == '1'}" style="float: left; margin-right: 10px;">
         <a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
     </div>
     <div style="margin-top: 3px;">

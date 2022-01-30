@@ -442,6 +442,14 @@
                     courseDate:$("#date").datebox('getValue') === '' ? '' : $("#date").datebox('getValue')
                 });
             });
+
+            //清空搜索条件
+            $("#clear-btn").click(function(){
+                $("#studentList").combobox('setValue',"");
+                $("#courseList").combobox('setValue',"");
+                $("#typeList").val("");
+                $("#date").datebox('setValue',"");
+            });
         });
     </script>
 </head>
@@ -452,16 +460,16 @@
 <!-- 工具栏 -->
 <div id="toolbar">
     <div style="float: left;"><a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">签到</a></div>
-    <div style="float: left;" class="datagrid-btn-separator"></div>
     <div th:if="${session.loginUser.userType == '3'}" style="float: left; margin-right: 10px;">
+        <div style="float: left;" class="datagrid-btn-separator"></div>
         <a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">补签</a>
     </div>
-    <div style="float: left;" class="datagrid-btn-separator"></div>
     <div th:if="${session.loginUser.userType == '3'}" style="float: left;">
+        <div style="float: left;" class="datagrid-btn-separator"></div>
         <a id="update" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
     </div>
-    <div style="float: left;" class="datagrid-btn-separator"></div>
     <div th:if="${session.loginUser.userType == '3'}" style="float: left; margin-right: 10px;">
+        <div style="float: left;" class="datagrid-btn-separator"></div>
         <a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
     </div>
     <div style="float: left;" class="datagrid-btn-separator"></div>

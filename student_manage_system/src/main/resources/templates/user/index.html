@@ -270,7 +270,7 @@
     </script>
 
 </head>
-<body class="easyui-layout" style="overflow-y: hidden" scroll="no">
+<body class="easyui-layout" style="overflow-y: hidden;" scroll="no">
 
 <div region="north" split="true" border="false" style="overflow: hidden; height: 80px;
         background:  #1e347b repeat-x center 50%;
@@ -288,10 +288,10 @@
             <a th:href="@{/user/logout}" id="loginOut">退出</a>
         </span>
 </div>
-<div region="west" hide="true" split="true" title="导航菜单" style="width:180px;background-color: #0000FF" id="west">
-    <div id="nav" class="easyui-accordion" fit="true" border="false"></div>
+<div region="west" hide="true" split="true" title="导航菜单" style="width:180px;" id="west">
+    <div id="nav" class="easyui-accordion" fit="true" border="false" style="background-color: #31b0d5;"></div>
 </div>
-<div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
+<div id="mainPanle" region="center" style="background-color: #31b0d5; overflow-y:hidden">
     <div id="tabs" class="easyui-tabs" fit="true" border="false" th:include="user/welcome :: welcome"></div>
 </div>
 <div region="south" split="true" style="height: 30px; background: #D2E0F2; ">

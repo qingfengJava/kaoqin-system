@@ -94,22 +94,17 @@
             function preLoadClazz(){
                 $("#studentList").combobox({
                     width: "200",
-                    height: "25",
+                    height: "30",
                     valueField: "id",
                     textField: "username",
                     multiple: false, //可多选
                     editable: false, //不可编辑
                     method: "post",
                     url: "/student/list?form=combox",
-                    onChange: function(newValue, oldValue){
-                        //加载班级下的学生
-                        $('#dataList').datagrid("options").queryParams = {clazzid: newValue};
-                        $('#dataList').datagrid("reload");
-                    }
                 });
                 $("#courseList").combobox({
                     width: "200",
-                    height: "25",
+                    height: "30",
                     valueField: "id",
                     textField: "name",
                     multiple: false,
@@ -434,7 +429,7 @@
                 url: "/student/list?form=combox",
                 onLoadSuccess: function(){
                     //默认选择第一条数据
-                    var data = $(this).combobox("getData");
+                    let data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                     getStudentSelectedCourseList(data[0].id);
                 },
@@ -448,7 +443,7 @@
                 url: "/course/getCourseList?from=combox",
                 onLoadSuccess: function(){
                     // 默认选择第一条数据
-                    var data = $(this).combobox("getData");
+                    let data = $(this).combobox("getData");
                     $(this).combobox("setValue", data[0].id);
                 }
 
@@ -458,7 +453,7 @@
             function getStudentSelectedCourseList(sid){
                 // 添加课程选择框
                 console.log("sid:", sid);
-                var u = "/attendance/getStudentSelectedCourseList";
+                let u = "/attendance/getStudentSelectedCourseList";
                 $("#add_courseList").combobox({
                     url:u+"?studentId="+sid,
                     onLoadSuccess: function(){

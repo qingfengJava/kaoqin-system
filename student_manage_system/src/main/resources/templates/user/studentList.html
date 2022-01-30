@@ -18,11 +18,11 @@
 </table>
 <!-- 工具栏 -->
 <div id="toolbar">
-	<div th:if="${session.loginUser.userType == '1' || session.loginUser.userType == '3'}" style="float: left;">
+	<div th:if="${session.loginUser.userType == '1'}" style="float: left;">
 		<a id="add" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
 	</div>
-	<div th:if="${session.loginUser.userType == '1' || session.loginUser.userType == '3'}" style="float: left;" class="datagrid-btn-separator"></div>
-	<div style="float: left;">
+	<div style="float: left;" class="datagrid-btn-separator"></div>
+	<div th:if="${session.loginUser.userType == '1'}" style="float: left;">
 		<a id="edit" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
 	</div>
 	<div style="float: left;" class="datagrid-btn-separator"></div>
@@ -30,10 +30,11 @@
 			<a id="delete" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-some-delete',plain:true">删除</a>
 		</div>
 	<div style="float: left;margin-top:4px;" class="datagrid-btn-separator" >
-		&nbsp;&nbsp;学号：<input id="search_student_name" class="easyui-textbox" name="search_student_name" /></div>
+		&nbsp;&nbsp;学号：<input id="search_student_name" class="easyui-textbox" name="search_student_name" style="width: 200px; height: 30px;"/></div>
 	<div style="margin-left: 10px;margin-top:4px;" >
 		专业：<input id="clazzList" class="easyui-textbox" name="class" />
 		<a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
+		<a id="clear-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">清空搜索</a>
 	</div>
 </div>
 
@@ -129,6 +130,7 @@
 					{field:'mobile',title:'联系方式',width:150}, /* 联系方式 */
 					{field:'classId',title:'专业',width:150, /* 所属专业 */
 						formatter: function(value,row,index){
+							setTimeout(function(){}, 100); //做延迟效果
 							if (row.classId){
 								/* 遍历专业信息 */
 								let clazzList = $("#clazzList").combobox("getData");
@@ -222,8 +224,8 @@
 		/* 下拉列表框 */
 		function preLoadClazz(){
 			$("#clazzList").combobox({
-				width: "150",
-				height: "25",
+				width: "200",
+				height: "30",
 				valueField: "id",
 				textField: "name",
 				multiple: false,
@@ -381,11 +383,10 @@
 										$("#editDialog").dialog("close");
 
 										// 刷新表格
-										$('#dataList').datagrid("options").queryParams = {classId: classId};
 										$("#dataList").datagrid("reload");
 										$("#dataList").datagrid("uncheckAll");
 										setTimeout(function(){
-											$("#clazzList").combobox('setValue', classId);
+											$("#clazzList").combobox('setValue', "");
 										}, 100);
 									} else{
 										$.messager.alert("消息提醒",data.message,"warning");
@@ -431,6 +432,11 @@
 				classId: $("#clazzList").combobox('getValue') === '' ? 0 : $("#clazzList").combobox('getValue')
 			});
 		});
+
+		$("#clear-btn").click(function () {
+			$("#search_student_name").val("");
+			$("#clazzList").combobox('setValue',"");
+		})
 	});
 </script>
 

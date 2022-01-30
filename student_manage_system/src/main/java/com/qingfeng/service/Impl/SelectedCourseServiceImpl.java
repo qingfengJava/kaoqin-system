@@ -83,7 +83,7 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
     public int deleteSelectedCourse(Integer selectedCourseId) {
         //删除前检查是否存在  健壮性处理
         SelectedCourse selectedCourse = selectedCourseMapper.selectById(selectedCourseId);
-        if (Objects.isNull(selectedCourse)) {
+        if (selectedCourse == null) {
             return -1;
         }
         // 退课

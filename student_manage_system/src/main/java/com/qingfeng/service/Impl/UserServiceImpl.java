@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<User>()
                 .eq(User::getClassId, id);
         List<User> users = userMapper.selectList(wrapper);
-        if (users == null){
+        if (users.size() == 0){
             //说明该专业下没有学生或者老师，可以删除
             return true;
         }

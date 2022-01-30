@@ -122,9 +122,9 @@ public class SelectedCourseController {
         //根据Id删除选课信息
         int count = selectedCourseService.deleteSelectedCourse(id);
         if (count > 0) {
-            return ResultVO.success();
+            return ResultVO.success("退课成功");
         } else {
-            return ResultVO.fail();
+            return ResultVO.fail("退课失败");
         }
     }
 }

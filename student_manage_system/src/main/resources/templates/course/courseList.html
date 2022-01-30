@@ -66,8 +66,8 @@
             //提前加载教师信息
             function preLoadClazz() {
                 $("#teacherList").combobox({
-                    width: "150",
-                    height: "25",
+                    width: "250",
+                    height: "30",
                     valueField: "id",
                     textField: "username",
                     multiple: false,
@@ -329,6 +329,12 @@
                     weakday: $("#weakday option:selected").text() === "" ? "" : $("#weakday option:selected").text()
                 });
             });
+
+            $("#clear-btn").click(function () {
+                $('#courseName').val("");
+                $("#teacherList").combobox('setValue',"");
+                $("#weakday").val("");
+            })
         });
     </script>
 </head>
@@ -344,13 +350,14 @@
     <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="float: left;"><a id="edit" href="javascript:;" class="easyui-linkbutton"
                                  data-options="iconCls:'icon-edit',plain:true">修改</a></div>
+    <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="float: left; margin-right: 10px;"><a id="delete" href="javascript:;" class="easyui-linkbutton"
                                                      data-options="iconCls:'icon-some-delete',plain:true">删除</a></div>
     <div style="float: left;" class="datagrid-btn-separator"></div>
     <div style="margin-top: 3px;">
-        课程名称：<input id="courseName" class="easyui-textbox" name="clazzName"/>
+        课程名称：<input id="courseName" class="easyui-textbox" name="clazzName" style="width:200px;height:30px;border-radius: 5px;"/>
         上课星期：
-        <select id="weakday" name="weakday" style="width:150px;height:25px;">
+        <select id="weakday" name="weakday" style="width:200px;height:30px;border-radius: 5px;border-color: #9dc7e7;">
             <option selected></option>
             <option>星期一</option>
             <option>星期二</option>
@@ -361,8 +368,8 @@
             <option>星期天</option>
         </select>
         授课老师：<input id="teacherList" class="easyui-textbox" name="clazz"/>
-        <a id="search-btn" href="javascript:;" class="easyui-linkbutton"
-           data-options="iconCls:'icon-search',plain:true">搜索</a>
+        <a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
+        <a id="clear-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">清空搜索</a>
     </div>
 </div>
 
@@ -386,7 +393,7 @@
             <tr>
                 <td>上课星期：</td>
                 <td>
-                    <select id="add_weakday" name="weakday" style="width:200px;height:30px;border-color: #9dc7e7">
+                    <select id="add_weakday" name="weakday" style="width:200px;height:30px;border-color: #9dc7e7;border-radius: 5px;">
                         <option selected></option>
                         <option>星期一</option>
                         <option>星期二</option>
@@ -401,7 +408,7 @@
             <tr>
                 <td>上课时间:</td>
                 <td>
-                    <select id="courseDate" name="courseDate" style="width:200px;height:30px;border-color: #9dc7e7">
+                    <select id="courseDate" name="courseDate" style="width:200px;height:30px;border-color: #9dc7e7;border-radius: 5px;">
                         <option selected></option>
                         <option>08:00:00~09:40:00</option>
                         <option>10:10:00~11:50:00</option>
@@ -447,7 +454,7 @@
             <tr>
                 <td>上课星期：</td>
                 <td>
-                    <select id="edit_weakday" name="weakday" style="width:200px;height:30px;border-color: #9dc7e7">
+                    <select id="edit_weakday" name="weakday" style="width:200px;height:30px;border-color: #9dc7e7;border-radius: 5px;">
                         <option selected></option>
                         <option>星期一</option>
                         <option>星期二</option>
@@ -462,7 +469,7 @@
             <tr>
                 <td>上课时间:</td>
                 <td>
-                    <select id="edit_courseDate" name="courseDate" style="width:200px;height:30px;border-color: #9dc7e7">
+                    <select id="edit_courseDate" name="courseDate" style="width:200px;height:30px;border-color: #9dc7e7;border-radius: 5px;">
                         <option selected></option>
                         <option>08:00:00~09:40:00</option>
                         <option>10:10:00~11:50:00</option>

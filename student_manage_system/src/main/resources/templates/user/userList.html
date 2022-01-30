@@ -34,6 +34,7 @@
 	<div style="margin-left: 10px;margin-top:4px;" >
 		专业：<input id="clazzList" class="easyui-textbox" name="class" />
 		<a id="search-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
+		<a id="clear-btn" href="javascript:;" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">清空搜索</a>
 	</div>
 </div>
 
@@ -159,6 +160,7 @@
 					{field:'mobile',title:'联系方式',width:150}, /* 联系方式 */
 					{field:'classId',title:'专业',width:150, /* 所属专业 */
 						formatter: function(value,row,index){
+							setTimeout(function(){}, 100); //做延迟效果
 							if (row.classId){
 								/* 遍历专业信息 */
 								let clazzList = $("#clazzList").combobox("getData");
@@ -252,7 +254,7 @@
 		/* 下拉列表框 */
 		function preLoadClazz(){
 			$("#clazzList").combobox({
-				width: "250",
+				width: "200",
 				height: "30",
 				valueField: "id",
 				textField: "name",
@@ -463,6 +465,11 @@
 				classId: $("#clazzList").combobox('getValue') === '' ? 0 : $("#clazzList").combobox('getValue')
 			});
 		});
+
+		$("#clear-btn").click(function () {
+			$("#search_student_name").val("");
+			$("#clazzList").combobox('setValue',"");
+		})
 	});
 </script>
 

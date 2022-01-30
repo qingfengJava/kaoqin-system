@@ -24,6 +24,11 @@ public interface LeaveService {
      */
     int addLeave(Leave leave);
 
+    /**
+     * 修改请假信息
+     * @param leave
+     * @return
+     */
     int editLeave(Leave leave);
 
     /**

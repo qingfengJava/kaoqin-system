@@ -43,9 +43,15 @@ public interface CourseService {
     /**
      * 查询课程Id
      * @param ids
+     * @param teacherId
      * @return
      */
     List<Course> getCourseById(List<Integer> ids, int teacherId);
 
+    /**
+     * 根据Id查询课程
+     * @param ids
+     * @return
+     */
     List<Course> getCourseById(List<Integer> ids);
 }

@@ -4,8 +4,9 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 /**
+ * 日期格式化类
+ *
  * @author 清风学Java
  */
 public class DateFormatUtil {

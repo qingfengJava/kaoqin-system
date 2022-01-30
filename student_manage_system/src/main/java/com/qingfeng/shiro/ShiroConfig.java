@@ -73,18 +73,6 @@ public class ShiroConfig {
         // 设置 realm 使用 hash 凭证匹配器
         realm.setCredentialsMatcher(credentialsMatcher);
 
-//        // 开启缓存管理
-//        EhCacheManager cacheManager = new EhCacheManager();
-//        realm.setCacheManager(cacheManager);
-//        // 开启全局缓存
-//        realm.setCachingEnabled(true);
-//        // 开启认证缓存
-//        realm.setAuthenticationCachingEnabled(true);
-//        realm.setAuthenticationCacheName("authenticationCache");
-//        // 开启授权缓存
-//        realm.setAuthorizationCachingEnabled(true);
-//        realm.setAuthorizationCacheName("authorizationCache");
-
         return realm;
     }
 

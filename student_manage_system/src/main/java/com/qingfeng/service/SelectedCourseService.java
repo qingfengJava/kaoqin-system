@@ -40,6 +40,11 @@ public interface SelectedCourseService {
      */
     boolean checkSelectedCourse(Integer studentId);
 
+    /**
+     * 根据Id查询学生选课信息
+     * @param studentId
+     * @return
+     */
     List<SelectedCourse> getAllBySid(Integer studentId);
 
     /**

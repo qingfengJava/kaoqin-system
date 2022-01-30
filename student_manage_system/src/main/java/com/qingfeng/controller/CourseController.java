@@ -119,6 +119,11 @@ public class CourseController {
     }
 
 
+    /**
+     * 删除课程信息
+     * @param data
+     * @return
+     */
     @PostMapping("/deleteCourse")
     @ResponseBody
     public ResultVO<Boolean> deleteCourse(IdsData data) {

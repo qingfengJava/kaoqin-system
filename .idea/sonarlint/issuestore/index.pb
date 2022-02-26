@@ -3,8 +3,6 @@ M
 student_manage_system/HELP.md,2\9\29293467bee6ae15f3015549e5805133040be94b
 ‰
 Ystudent_manage_system/src/test/java/com/qingfeng/StudentManageSystemApplicationTests.java,2\4\2455fe543a8fddbaa914b99cf48d0bbc0f7091e5
-M
-student_manage_system/pom.xml,5\a\5a6612a702e74c5d808ba2b31b58cb0299e9157f
 \
 ,.idea/inspectionProfiles/Project_Default.xml,4\9\496a238a6afa168dbaf6efd37bb459331589579c
 N
@@ -235,8 +233,6 @@ Xstudent_manage_system/src/main/java/com/qingfeng/service/Impl/AttendanceService
 Tstudent_manage_system/src/main/java/com/qingfeng/service/Impl/CourseServiceImpl.java,c\3\c341c10f9a0e7fdac13bdb2ccc7c821f9f2806dc
 |
 Lstudent_manage_system/src/main/java/com/qingfeng/constants/UserConstant.java,3\5\3539bc7024e45a658af9839ba568301162da8fd4
-…
-Ustudent_manage_system/src/main/java/com/qingfeng/controller/AttendanceController.java,5\8\5837c11bd6b87f544f29bba2b11b52a609eb8168
 
 Ostudent_manage_system/src/main/java/com/qingfeng/controller/BaseController.java,a\3\a32592ddecfb737e6bd7f5a96466954ab049ecc0
 €
@@ -257,8 +253,6 @@ r
 Bstudent_manage_system/src/main/java/com/qingfeng/entity/Leave.java,e\2\e2f790f9ecef80c88f0b23bc5711195f1e630457
 {
 Kstudent_manage_system/src/main/java/com/qingfeng/entity/SelectedCourse.java,d\3\d38a666ba3f4029354b336dceb6f6c9f9f8f8b7d
-q
-Astudent_manage_system/src/main/java/com/qingfeng/entity/User.java,d\f\df6a5d162cce3e26c11a304a777f3c48f08c3c48
 }
 Mstudent_manage_system/src/main/java/com/qingfeng/mapper/AttendanceMapper.java,f\d\fdcaee71c9c74993f61bf04b27c9b539ad2dd9d2
 x
@@ -313,3 +307,7 @@ z
 Jstudent_manage_system/src/main/java/com/qingfeng/service/LeaveService.java,8\7\874cb2cefb719ec3992cfb5d9f0227b2059efba5
 w
 Gstudent_manage_system/src/main/java/com/qingfeng/shiro/ShiroConfig.java,e\c\ecbc52dc9ef21fab304a840c13a458fed2a5d1bc
+q
+Astudent_manage_system/src/main/java/com/qingfeng/entity/User.java,d\f\df6a5d162cce3e26c11a304a777f3c48f08c3c48
+M
+student_manage_system/pom.xml,5\a\5a6612a702e74c5d808ba2b31b58cb0299e9157f
